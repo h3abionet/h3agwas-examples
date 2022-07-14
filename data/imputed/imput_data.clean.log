@@ -1,0 +1,34 @@
+PLINK v1.90b6.21 64-bit (19 Oct 2020)
+Options in effect:
+  --bfile /home/jeantristan/Travail/git/h3agwas_buildexample/1000G/example_h3agwas_1000g/data/imputed/imput_data
+  --maf 0.02
+  --make-bed
+  --out /home/jeantristan/Travail/git/h3agwas_buildexample/1000G/example_h3agwas_1000g/data/imputed/imput_data.clean
+
+Hostname: n12.core.wits.ac.za
+Working directory: /home/jeantristan/Travail/git/h3agwas_test/regenie
+Start time: Tue Jul 12 14:29:59 2022
+
+Random number seed: 1657628999
+96456 MB RAM detected; reserving 48228 MB for main workspace.
+47956 variants loaded from .bim file.
+500 people (0 males, 0 females, 500 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/home/jeantristan/Travail/git/h3agwas_buildexample/1000G/example_h3agwas_1000g/data/imputed/imput_data.clean.nosex
+.
+Using 1 thread (no multithreaded calculations invoked).
+Before main variant filters, 500 founders and 0 nonfounders present.
+Calculating allele frequencies... done.
+7989 variants removed due to minor allele threshold(s)
+(--maf/--max-maf/--mac/--max-mac).
+39967 variants and 500 people pass filters and QC.
+Note: No phenotypes present.
+--make-bed to
+/home/jeantristan/Travail/git/h3agwas_buildexample/1000G/example_h3agwas_1000g/data/imputed/imput_data.clean.bed
++
+/home/jeantristan/Travail/git/h3agwas_buildexample/1000G/example_h3agwas_1000g/data/imputed/imput_data.clean.bim
++
+/home/jeantristan/Travail/git/h3agwas_buildexample/1000G/example_h3agwas_1000g/data/imputed/imput_data.clean.fam
+... done.
+
+End time: Tue Jul 12 14:29:59 2022

@@ -1,0 +1,29 @@
+PLINK v1.90b6.21 64-bit (19 Oct 2020)
+Options in effect:
+  --bfile KGPH3abionet_imputed/KGPH3abionet_imputed
+  --extract range utils/listsnparray_pheno1.tokeep
+  --keep utils/subpopnoqc_ind.tsv
+  --make-bed
+  --out data//imputed/imput_data
+
+Hostname: n15.core.wits.ac.za
+Working directory: /home/jeantristan/Travail/git/h3agwas_buildexample/1000G/build_dataset_example
+Start time: Mon Jul 11 14:52:29 2022
+
+Random number seed: 1657543949
+50151 MB RAM detected; reserving 25075 MB for main workspace.
+86009148 variants loaded from .bim file.
+2010 people (0 males, 0 females, 2010 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to data//imputed/imput_data.nosex .
+--extract range: 85961192 variants excluded.
+--extract range: 47956 variants remaining.
+--keep: 500 people remaining.
+Using 1 thread (no multithreaded calculations invoked).
+Before main variant filters, 500 founders and 0 nonfounders present.
+Calculating allele frequencies... done.
+47956 variants and 500 people pass filters and QC.
+Note: No phenotypes present.
+--make-bed to data//imputed/imput_data.bed + data//imputed/imput_data.bim +
+data//imputed/imput_data.fam ... done.
+
+End time: Mon Jul 11 15:05:31 2022
