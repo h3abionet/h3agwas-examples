@@ -1,5 +1,7 @@
 # H3AGWAS : dataset and command line example 
 
+example and command line to run [h3agwas pipeline](https://github.com/h3abionet/h3agwas)
+
 ## Dataset built 
 * Dataset has been build using h3agwas array and 1000 genomes, we have sub select 500 individuals and 50,000 SNPs to build example. descriptif and explanation can be found [here](README_buildataset.md) or bash script [here](builddata_set.bash)
 
@@ -28,29 +30,21 @@ After calling of your illumina data and format in plink file, qc must be appypip
  * plink file split between directory `--input_dir` and input pattern `--input_pat` 
  * `--output_dir` corresponding at the directory output directory 
 
-* optional analyse can be done 
- * gc : need a specific file
- * batch analyse : 
- * phenotype file : `--phenotype`, column corresponding in file `--pheno_col`  
- * `case_control` with `case_control_col`  perform xx 
-
 ```
-
 ~/nextflow run ~/Travail/git//h3agwas/qc/main.nf --input_dir data/array_plk  --input_pat array --ouput_dir qc  --output kgpexample \
  --phenotype data/pheno/pheno_test.all --pheno_col phenoqc_ql \
  --case_control data/pheno/pheno_test.all --case_control_col Sex \
  --batch data/pheno/pheno_test.all --batch_col batch \
  -profile slurmSingularity -resume
-
 ```
 
 * output :
- * `$dir_output/$output.[bed/fam/bim]` : plink file after filter 
- * `${dir_output}/$output.pdf` : [report of qc, for example here](out_example/qc/kgpexample.pdf)
- * `$dir_output/pca/` : contains figure and plink file used 
- * `$dir_output/samples/` : contains figures, files relative to qc apply to sample
- * `$dir_output/snps/` : contains figures, files relative to qc apply to SNPs
- * `$dir_output/phase1//` : contains figures, files relative to qc apply at phase 1 of qc
+  * `$dir_output/$output.[bed/fam/bim]` : plink file after filter 
+  * `${dir_output}/$output.pdf` : [report of qc, for example here](out_example/qc/kgpexample.pdf)
+  * `$dir_output/pca/` : contains figure and plink file used 
+  * `$dir_output/samples/` : contains figures, files relative to qc apply to sample
+  * `$dir_output/snps/` : contains figures, files relative to qc apply to SNPs
+  * `$dir_output/phase1//` : contains figures, files relative to qc apply at phase 1 of qc
 
 ## Association pipeline 
 Pipeline offer various software for association  :
@@ -69,8 +63,8 @@ nextflow run ~/Travail/git/h3agwas/assoc --input_dir data/imputed/ --input_pat i
 ```
 
 * output :
- * [in the report, we combined best results, manhantan plot and qq plot](out_example/assoc-report.pdf) 
- * Each software as in own folder with output of software
+  * [in the report, we combined best results, manhantan plot and qq plot](out_example/assoc-report.pdf) 
+  * Each software as in own folder with output of software
 
 
 ### Information relative to software
@@ -103,15 +97,15 @@ done
 
 ### Run Meta analyse pipeline 
 * input :
- * user can choose software that he want to run : metal (`--metal`), gwama (`--gwama 1`), metasoft (` --metasoft 1`) MrMega (`--mrmega 1 `) and plink (`--plink  1`)
+  * user can choose software that he want to run : metal (`--metal 1`), gwama (`--gwama 1`), metasoft (` --metasoft 1`) MrMega (`--mrmega 1`) and plink (`--plink 1`)
 
 ```
 nextflow run ~/Travail/git/h3agwas/meta/meta-assoc.nf   --metal 1 --gwama 1 --metasoft 1 --mrmega 1 --plink  1  --file_config utils/input_meta.csv -resume -profile slurmSingularity --output_dir meta
 ```
 
 * output :
- * each software as in own folder 
- * [Same report than association is generated](out_example/meta_report.pdf)
+  * each software as in own folder 
+  * [Same report than association is generated](out_example/meta_report.pdf)
 
 ### Software meta analyse and option
 
@@ -124,19 +118,19 @@ Fine Mapping can be run on full summary statistics, or specific windows using tw
 ### general option :
 * 
 * header of summary statistics :
- * `--head_pval` PVALUE
- * `--head_bp` Positions
- * `--head_chr` Chromosome
- * `--head_rs` rs id of phenotype file
- * `--head_beta` effect on file 
- * `--head_se` Standart error 
- * `--head_A1` Effect allele
- * `--head_A2` other allele
+  * `--head_pval` PVALUE
+  * `--head_bp` Positions
+  * `--head_chr` Chromosome
+  * `--head_rs` rs id of phenotype file
+  * `--head_beta` effect on file 
+  * `--head_se` Standart error 
+  * `--head_A1` Effect allele
+  * `--head_A2` other allele
 * Software :
-* metal : ``
+  * by default all software will be run
 * phenotype of gwas catalog:
- * `--list_pheno`
- * `gwascat`
+  * `--list_pheno`
+  * `gwascat`
 * significant treshold :
  `--threshold_p` : by default to 5e-8
 
@@ -147,11 +141,10 @@ Fine Mapping can be run on full summary statistics, or specific windows using tw
 ```
 nextflow run  ~/Travail/git/h3agwas/finemapping/main.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --list_pheno "Type 2 diabetes" --input_dir  data/imputed/  --input_pat imput_data --file_gwas data/summarystat/all_pheno.gemma  --output_dir finemapping_pheno1 --output finemapping_pheno1 -resume  -profile slurmSingularity
 ```
-
 * output :
- * folder output contains for each independant SNPs a folder with result :
-  * figure with all resume data as locus zoom
-  * file contains all positiosn with different probability of each software
+  * folder output contains for each independant SNPs a folder with result :
+   * figure with all resume data as locus zoom
+   * file contains all positiosn with different probability of each software
 
 
 ### specific windows
@@ -162,9 +155,10 @@ nextflow run  ~/Travail/git/h3agwas/finemapping/finemap_region.nf  --head_pval p
 
 ###  GCTA-COJO: conditional and joint analysis using summary data 
 pipeline of cojo used two type of input :
- * plink file + phenotype with `--input_dir`, `--input_pat`, `--data` and `--pheno`
- * summary statistics :  `--file_gwas` one or more, and `--head_[lhead]`
- * will run cojo on each chromosome 
+  * plink file + phenotype with `--input_dir`, `--input_pat`, `--data` and `--pheno`
+  * summary statistics :  `--file_gwas` one or more, and `--head_[lhead]`
+  * will run cojo on each chromosome 
+
 #### Command line 
 ```
 nextflow run   ~/Travail/git/h3agwas/h3agwas/finemapping/cojo-assoc.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --input_dir data/imputed/  --input_pat imput_data  --output_dir cojo --data data/pheno/pheno_test.all --pheno pheno_qt1 --file_gwas data/summarystat/all_pheno.gemma  -resume   -profile slurmSingularity
@@ -172,7 +166,7 @@ nextflow run   ~/Travail/git/h3agwas/h3agwas/finemapping/cojo-assoc.nf --head_pv
 
 
 
-## Annotatioon data 
+## Annotation data 
 ### warning : 
  aws : locus zoom doesn't work, pipeline on AWS doesn't work, you must install your own locus zoom
 
@@ -183,7 +177,7 @@ input :
  * phenotype and data file
  * rs from gwas (one or more, separate with comma)
  * Annotation used annovar file, if you don't `list_file_annot` and `info_file_annot`, data will be downloaded
-### probleme of command line`
+
 ```
 nextflow run  ~/Travail/git/h3agwas/utils/annotation/main.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --input_dir data/imputed/  --input_pat imput_data --file_gwas data/summarystat/all_pheno.gemma  --output_dir annotation --list_rs "2:45832137:A:G,1:117539108:G:T" --data data/pheno/pheno_test.all --pheno pheno_qt1  -resume  -profile slurmSingularity --loczm_bin  "/dataE/AWIGenGWAS/shared/ResultGWAS/Ressource/locuszoom/bin/locuszoom"
 ```
@@ -204,22 +198,23 @@ awk '{print $1"\t"$4}' data/array_plk/array.bim  > utils/list_posarray
 nextflow run ~/Travail/git/h3agwas//utils/build_example_data/main.nf -profile slurmSingularity   --pos_allgeno utils/list_posarray -resume --nb_snp 3 --output_dir simul_gcta_main
 ```
 ### Output of pipeline:
- * `geno_all` : contains final  genotype
+* `geno_all` : contains final  genotype
   * `geno_all/$output[.bed/fam/bim]` : plink file contains positions from array
-   * `geno_all/$output_sex` : sex of individual after random
-   * `$output_sexsex_change_plk.ind` : list of individuals, where sex has been randomly changed
- * `gwascat` : folder contains gwas catalog download :
+  * `geno_all/$output_sex` : sex of individual after random
+  * `$output_sexsex_change_plk.ind` : list of individuals, where sex has been randomly changed
+* `gwascat` : folder contains gwas catalog download :
   * `$output/gwascat/gwascat_format_all.csv` : all positions from gwas cat
   * `$output/gwascat/gwascat_format.[pos,bed]`  : positions associated to phenotype diabete
   * `$output/gwascat/gwascat_format_resume.csv` : information relative to diabetes
- * `simul_pheno` :
+* `simul_pheno` :
   * `$output/simul_pheno/datai/$output[.bed,plink,fam]` : plink contains all position extracted from gwas catalo link to phenotype
   * `$output/simul_pheno/data_format` :
-   * positions clumped to avoid LD between positions extracted of phenotype :
-   *  `$output.effect.rs_clump.clumped` : positions clumped to avoid LD between positions extracted of phenotype
-   *  `$output.effect.rs.assoc`  $output.effect.rs_clump.log      $output.effect.rs.infors
+  * positions clumped to avoid LD between positions extracted of phenotype :
+    *  `$output.effect.rs_clump.clumped` : positions clumped to avoid LD between positions extracted of phenotype
+    *  `$output.effect.rs.assoc`  $output.effect.rs_clump.log      $output.effect.rs.infors
   * `$output.effect.rs` : effect of each position to build phenotype
   * `$output.effect.rs.infors` : information relative of positions to build phenotype
+
 ### other example 
 * see [page build example](README_buildataset.md)
 
@@ -259,11 +254,7 @@ nextflow run  ~/Travail/git/h3agwas/finemapping/cond-assoc.nf --input_dir data/i
 
 output :
 * `cond/res/fig/` : contains figure and merge resultat :
- * out.csv   :
-  * rscond : rs used  for condition  
-   * Init : gemma without pos cond
-   *  Merge : all position together used as cond 
-  * R2 : ld with posistion ref
+  * out.csv   :
 
 ```
 "rscond","chr","rs","ps","n_miss","allele1","allele0","af","beta","se","logl_H1","l_remle","p_wald","Num","CHR_A","BP_A","R2"
@@ -273,18 +264,22 @@ output :
 "17:78502076:T:G",17,"17:78562921:G:A",78562921,0,"A","G",0.17,8.972201,1.362844,-2104.497,15.95574,1.170588e-10,4,17,78502076,0.0037796
 "Merge",17,"17:78562921:G:A",78562921,0,"A","G",0.17,8.696802,2.570401,-2096.868,16.26486,0.0007726084,5,NA,NA,NA
 ```
+    * rscond : rs used  for condition  
+     * Init : gemma without pos cond
+     *  Merge : all position together used as cond 
+  * R2 : ld with posistion ref
 
 * figures :
  * `out_ld.pdf` : ld between positions 
- * `out.pdf` : barplot of -log10(p_wald), condition or not 
-
+ * `out.pdf` : barplot of -log10(p\_wald), condition or not 
 
 
 ## Format gwas file between format
+
 input :
  *  new and old header, will be replaced
  * `input_dir` and `input_pat` : rename rsid in function of plink file
- *  `--file_ref_gzip`  : used to check ref alternatif or rsid
+ * `--file_ref_gzip` : used to check ref alternatif or rsid
 
 ```
 nextflow run  ~/Travail/git/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --file_gwas data/summarystat/all_pheno.gemma  --output_dir format_assoc   -resume --headnew_pval p --headnew_bp bp --headnew_chr CHR --headnew_rs SNP --headnew_beta beta --headnew_se se --headnew_A1 allele1 --headnew_A2 allele0 --file_ref_gzip data/utils/all_rsinfo.init.gz --input_dir data/imputed/ --input_pat imput_data -profile slurmSingularity
@@ -292,11 +287,10 @@ nextflow run  ~/Travail/git/h3agwas/formatdata/format_gwasfile.nf --head_pval p_
 
 
 ## Format vcf file from imputation 
-* ``
 ### to  plink file
 * format vcf file from imputation to plink file and produce a report
 * pipeline need :
- * reference fasta 
+  * reference fasta 
  
 ```
  ls data/imputed/vcf/\*.vcf.gz  > utils/listvcf
@@ -307,8 +301,8 @@ nextflow run  ~/Travail/git/h3agwas/formatdata/format_gwasfile.nf --head_pval p_
  nextflow run ~/Travail/git//h3agwas/formatdata/vcf_in_plink.nf --file_listvcf utils/listvcf --output_pat  kgp_imputed --output_dir plink_imputed/   --reffasta utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz  -profile slurmSingularity
 ```
 * output :
- * plink file clean :
- * report 
+  * plink file clean :
+  * report 
 * [other example](README_buildataset.md)
 
 
@@ -337,8 +331,8 @@ nextflow ~/Travail/git/h3agwas/formatdata/vcf_in_impute2.nf --file_listvcf listv
 
 ## Heritability  estimation
 pipeline of heritability estimation and co-heritatbility, can used two type of input : 
- * plink file + phenotype with `--input_dir`, `--input_pat`, `--data` and `--pheno`
- * summary statistics :  `--file_gwas` one or more, and `--head_[lhead]`
+  * plink file + phenotype with `--input_dir`, `--input_pat`, `--data` and `--pheno`
+  * summary statistics :  `--file_gwas` one or more, and `--head_[lhead]`
 
 ```
 ~/nextflow ~/Travail/git/h3agwas/heritabilities/main.nf \
@@ -352,7 +346,6 @@ pipeline of heritability estimation and co-heritatbility, can used two type of i
 * input : 
  * list of summary statistic `file_gwas` and header from gwas file: `-head_[name]`
  * also you can give nformation relative to : ` --input_dir data/imputed/ --input_pat imput_data --pheno pheno_qt1,pheno_qt2 --data data/pheno/pheno_test.all `, can add N value to each summary statistic
-
 
 ```
 nextflow h3abionet/h3agwas/meta/mtag-assoc.nf --head_freq af --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --input_dir data/imputed/ --input_pat imput_data --file_gwas  data/summarystat/all_pheno.gemma,data/summarystat/all_phenoq2.gemma --pheno pheno_qt1,pheno_qt2 --data data/pheno/pheno_test.all -resume   -profile slurmSingularity
