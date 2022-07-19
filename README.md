@@ -66,6 +66,16 @@ nextflow run ~/Travail/git/h3agwas/assoc --input_dir data/imputed/ --input_pat i
   * [in the report, we combined best results, manhantan plot and qq plot](out_example/assoc-report.pdf) 
   * Each software as in own folder with output of software
 
+* example with `list_bgen` arguments
+```
+ls data/imputed/bgen_chro/*.bgen > listbgen
+~/nextflow run ~/Travail/git/h3agwas/assoc --input_dir data/imputed/ --input_pat imput_data \
+ --data data/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
+ --output_dir assoc_listbgen --output assoc \
+ --boltlmm 1 --sample_snps_rel 1 --regenie 1 --fastgwa 1 --grm_nbpart 2\
+  -profile slurmSingularity \
+ --list_bgen listbgen --bgen_sample data/imputed/bgen/out.sample --saige 1 -resume
+```
 
 ### Information relative to software
 | Software | plink | vcf | bgen | impute 2 | option to activate |
@@ -79,7 +89,7 @@ nextflow run ~/Travail/git/h3agwas/assoc --input_dir data/imputed/ --input_pat i
 | --- | --- | --- | --- | --- |
 | description | genotype |  dosage | dosage | dosage | |
 | --- | --- | --- | --- | --- |
-| Option | `--input_dir`/`--input_pat`| `--list_vcf` | `--bgen`/`--bgen_sample` | `bolt_impute2filelist`/`bolt_impute2fidiid` |
+| Option | `--input_dir`/`--input_pat`| `--list_vcf` | `--list_bgen`/ `--bgen`/`--bgen_sample` | `bolt_impute2filelist`/`bolt_impute2fidiid` |
 | --- | --- | --- | --- | --- |
 
 ## Meta Analyse 
