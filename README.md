@@ -366,3 +366,9 @@ pipeline of heritability estimation and co-heritatbility, can used two type of i
 nextflow h3abionet/h3agwas/meta/mtag-assoc.nf --head_freq af --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --input_dir data/imputed/ --input_pat imput_data --file_gwas  data/summarystat/all_pheno.gemma,data/summarystat/all_phenoq2.gemma --pheno pheno_qt1,pheno_qt2 --data data/pheno/pheno_test.all -resume   -profile slurmSingularity
 ```
 
+## conversion of positions  between build
+
+* by default conversion position of genome download gwas catalog,download information of rs and convert positions
+```
+nextflow run h3abionet/h3agwas/formatdata/convert_posversiongenome.nf -profile slurmSingularity -resume
+```
