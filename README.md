@@ -331,6 +331,11 @@ nextflow run ~/Travail/git//h3agwas/formatdata/vcf_in_bimbam.nf --file_listvcf u
 nextflow run ~/Travail/git//h3agwas/formatdata/vcf_in_bgen.nf --file_listvcf utils/listvcf --output_pat  exampledata2_imp --output_dir ./bgen -resume -profile slurmSingularity
 ```
 
+* option where bgen split by chro :
+```
+~/nextflow run h3abionet/h3agwas/formatdata/vcf_in_bgen_merge_chro.nf --output_dir bgen_v3 --output all  -profile slurmSingularity --file_listvcf listvcf -resume
+```
+
 ### to impute2
 * used for bolt-lmm
 
