@@ -130,6 +130,7 @@ nextflow run ~/Travail/git/h3agwas/meta/meta-assoc.nf   --metal 1 --gwama 1 --me
 | plink | no | yes | no | no |
 | Metasoft | no | no | no | default |
 | --- | --- | --- | --- | --- |
+
 1 'weighted-z' requests weighted Z-score-based p-values (as computed by the Abecasis Lab's METAL software)
 
 
