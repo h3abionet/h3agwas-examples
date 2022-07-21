@@ -86,6 +86,7 @@ ls data/imputed/bgen_chro/*.bgen > listbgen
 | saige | yes |  yes | yes | no | --saige 1 |
 | bolt-LMM | yes |  no | yes | yes | --boltlmm 1|
 | fast-lmm | yes |  no | no | no | --fastlmm 1 |
+| regenie | yes |  no | yes | no | --regenie 1 |
 | --- | --- | --- | --- | --- |
 | description | genotype |  dosage | dosage | dosage | |
 | --- | --- | --- | --- | --- |
@@ -114,12 +115,23 @@ nextflow run ~/Travail/git/h3agwas/meta/meta-assoc.nf   --metal 1 --gwama 1 --me
 ```
 
 * output :
-  * each software as in own folder 
+  * Each software as in own folder 
   * [Same report than association is generated](out_example/meta_report.pdf)
 
 ### Software meta analyse and option
 
-TODO
+| Software | `ma_genomic_cont` | `ma_inv_var_weigth` | `ma_overlap_sample` | `ma_random_effect` |
+| --- | --- | --- | --- | --- |
+| explanation | genomic control | invert variance weight | sample overlap | Random Effect |
+| default | 0 | 0 | 0 | 0 |
+| metal | yes | yes  | yes | no |
+| gwama | yes | default  no | yes |
+| Mr Mega| yes | no | no | no |
+| plink | no | yes | no | no |
+| Metasoft | no | no | no | default |
+| --- | --- | --- | --- | --- |
+1 'weighted-z' requests weighted Z-score-based p-values (as computed by the Abecasis Lab's METAL software)
+
 
 ## Finemapping
 
