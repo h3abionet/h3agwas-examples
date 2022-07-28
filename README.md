@@ -152,7 +152,7 @@ Fine Mapping can be run on full summary statistics, or specific windows using tw
 * Software :
   * by default all software will be run
 * phenotype of gwas catalog:
-  * `--list_pheno`
+  * `--list_phenogc`
   * `gwascat`
 * significant treshold :
  `--threshold_p` : by default to 5e-8
@@ -162,7 +162,7 @@ Fine Mapping can be run on full summary statistics, or specific windows using tw
 * pipeline will apply clump to defined significant positions and run for each windows various software of fine mapping 
 
 ```
-nextflow run  ~/Travail/git/h3agwas/finemapping/main.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --list_pheno "Type 2 diabetes" --input_dir  data/imputed/  --input_pat imput_data --file_gwas data/summarystat/all_pheno.gemma  --output_dir finemapping_pheno1 --output finemapping_pheno1 -resume  -profile slurmSingularity
+nextflow run  ~/Travail/git/h3agwas/finemapping/main.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --list_phenogc "Type 2 diabetes" --input_dir  data/imputed/  --input_pat imput_data --file_gwas data/summarystat/all_pheno.gemma  --output_dir finemapping_pheno1 --output finemapping_pheno1 -resume  -profile slurmSingularity
 ```
 * output :
   * folder output contains for each independant SNPs a folder with result :
@@ -173,7 +173,7 @@ nextflow run  ~/Travail/git/h3agwas/finemapping/main.nf --head_pval p_wald --hea
 ### specific windows
 Algorithm is same than previous, but user must specify chro(`--chro`), and range position (`--begin_seq`, `--end_seq`)
 ```
-nextflow run  ~/Travail/git/h3agwas/finemapping/finemap_region.nf  --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --list_pheno "Type 2 diabetes" --input_dir  data/imputed/  --input_pat imput_data --file_gwas data/summarystat/all_pheno.gemma  --output_dir finemapping_pheno1_wind --output finemapping_pheno1 -resume  -profile slurmSingularity --begin_seq 112178657 --end_seq 113178657 --chro 10
+nextflow run  ~/Travail/git/h3agwas/finemapping/finemap_region.nf  --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --list_phenogc "Type 2 diabetes" --input_dir  data/imputed/  --input_pat imput_data --file_gwas data/summarystat/all_pheno.gemma  --output_dir finemapping_pheno1_wind --output finemapping_pheno1 -resume  -profile slurmSingularity --begin_seq 112178657 --end_seq 113178657 --chro 10
 ```
 
 ###  GCTA-COJO: conditional and joint analysis using summary data 
