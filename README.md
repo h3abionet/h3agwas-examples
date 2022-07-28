@@ -15,7 +15,7 @@ Example and command line to run [h3agwas pipeline](https://github.com/h3abionet/
    * `super_pop` : super-population used to split population
    * Sex : sex after randomisation
    * gender1000G : sex of individual 1000 Genome
-   * SexChange : balise if sex has been randomize
+   * SexChange : False : mean sex phenotype is sex genotype T / TRUE : mean sex phenotype is different than sex Genotype. pipeline had change sex phenotype to created example for qc
    * phenoqc\_ql : binary phenotype used fo
    * pheno\_qt[12] : quantitative phenotype used for GWAS
  * `summarystat/[pop]_pheno.gemma` : result of GWAS using GEMMA for phenotype 1
