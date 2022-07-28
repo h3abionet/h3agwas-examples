@@ -1,37 +1,38 @@
 # H3AGWAS : dataset and command line example 
 
-example and command line to run [h3agwas pipeline](https://github.com/h3abionet/h3agwas)
+Example and command line to run [h3agwas pipeline](https://github.com/h3abionet/h3agwas)
 
 ## Dataset built 
-* Dataset has been build using h3agwas array and 1000 genomes, we have sub select 500 individuals and 50,000 SNPs to build example. descriptif and explanation can be found [here](README_buildataset.md) or bash script [here](builddata_set.bash)
+* Dataset has been build using 1000 Genomes Project data, selecting  50,000 SNPs found in the H3Africa Custom Chip Array and 500 individuals. Description and explanation can be found [here](README_buildataset.md) or bash script [here](builddata_set.bash)
 
 ## Data directory :
-* Data set can be found in [data folder](data), subfolder :
+* The data set can be found in [data folder](data), subfolder :
  * `data/array_plk/`: contains file for qc in plink format
  * `imputed` : contains file for gwas in plink format
  * `pheno/pheno_test.[pop]` : contains phenotype to perform gwas for each superpopulation of KGP :  AFR,AMR,EAS,EUR,SAS and all
-   * FID : ID Familiale
-   * IID : ID individual
-   * `super_pop` : super population used to split population
+   * FID : Family ID 
+   * IID : Individual ID 
+   * `super_pop` : super-population used to split population
    * Sex : sex after randomisation
-   * gender1000G : sex of 1000Genome
+   * gender1000G : sex of individual 1000 Genome
    * SexChange : balise if sex has been randomize
-   * phenoqc\_ql : binary phenotype used for 
-   * pheno\_qt[12] : pheno quantitative used for gwas
- * `summarystat/[pop]_pheno.gemma` : result of gwas using gemma for phenotype 1
- * `summarystat/all_phenoq2.gemma` : result of gwas using gwas for phenotype 2 and all
+   * phenoqc\_ql : binary phenotype used fo
+   * pheno\_qt[12] : quantitative phenotype used for GWAS
+ * `summarystat/[pop]_pheno.gemma` : result of GWAS using GEMMA for phenotype 1
+ * `summarystat/all_phenoq2.gemma` : result of GWAS using gwas for phenotype 2 and all
  * `utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of [its file](ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/All_20180423.vcf.gz)
  
 
 ## Quality control 
 
-After calling of your illumina data and format in plink file, qc must be appypipeline need :
+After calling Illumina data and formatting in plink file, qc must be appypipeline need :
 * input / output :
- * plink file split between directory `--input_dir` and input pattern `--input_pat` 
+ * `--input_dir` specifies directory where data can be found
+ * `--input_pat` specifies the base of the PLINK bed, bim and fam file name
  * `--output_dir` corresponding at the directory output directory 
 
 ```
-~/nextflow run ~/Travail/git//h3agwas/qc/main.nf --input_dir data/array_plk  --input_pat array --ouput_dir qc  --output kgpexample \
+nextflow run h3agwas/qc/main.nf --input_dir data/array_plk  --input_pat array --ouput_dir qc  --output kgpexample \
  --phenotype data/pheno/pheno_test.all --pheno_col phenoqc_ql \
  --case_control data/pheno/pheno_test.all --case_control_col Sex \
  --batch data/pheno/pheno_test.all --batch_col batch \
@@ -39,7 +40,7 @@ After calling of your illumina data and format in plink file, qc must be appypip
 ```
 
 * output :
-  * `$dir_output/$output.[bed/fam/bim]` : plink file after filter 
+  * `$dir_output/$output.[bed/fam/bim]` : PLINK files with resulting QC data
   * `${dir_output}/$output.pdf` : [report of qc, for example here](out_example/qc/kgpexample.pdf)
   * `$dir_output/pca/` : contains figure and plink file used 
   * `$dir_output/samples/` : contains figures, files relative to qc apply to sample
@@ -48,13 +49,13 @@ After calling of your illumina data and format in plink file, qc must be appypip
 
 ## Association pipeline 
 Pipeline offer various software for association  :
- * pipeline need at least : plink file  (see `--input_dir` and `--input_pat`), phenotype file (see `--data`) and 1 or more phenotype (`--phenotype`)
+ * pipeline needs at least the PLINK  (see `--input_dir` and `--input_pat`), phenotype file (see `--data`) and 1 or more phenotype (`--phenotype`)
  * optional optional :
   * for format see table below  
-  *  `--sample_snps_rel 1` : to build relatdness, sub select snps independant using pling
+  *  `--sample_snps_rel 1` : to build relatedness, sub select snps independant using plink
 
 ```
-nextflow run ~/Travail/git/h3agwas/assoc --input_dir data/imputed/ --input_pat imput_data \
+nextflow run h3agwas/assoc --input_dir data/imputed/ --input_pat imput_data \
  --data data/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
  --output_dir assoc --output assoc \
  --gemma 1 --assoc 1 --sample_snps_rel 1 --linear 1 \ 
@@ -69,7 +70,7 @@ nextflow run ~/Travail/git/h3agwas/assoc --input_dir data/imputed/ --input_pat i
 * example with `list_bgen` arguments
 ```
 ls data/imputed/bgen_chro/*.bgen > listbgen
-~/nextflow run ~/Travail/git/h3agwas/assoc --input_dir data/imputed/ --input_pat imput_data \
+nextflow run h3agwas/assoc --input_dir data/imputed/ --input_pat input_data \
  --data data/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
  --output_dir assoc_listbgen --output assoc \
  --boltlmm 1 --sample_snps_rel 1 --regenie 1 --fastgwa 1 --grm_nbpart 2\
@@ -93,7 +94,7 @@ ls data/imputed/bgen_chro/*.bgen > listbgen
 | Option | `--input_dir`/`--input_pat`| `--list_vcf` | `--list_bgen`/ `--bgen`/`--bgen_sample` | `bolt_impute2filelist`/`bolt_impute2fidiid` |
 | --- | --- | --- | --- | --- |
 
-## Meta Analyse 
+## Meta Analysis
 
 ### build input file 
 * a csv file need to described each input, contains header for each file 
@@ -106,12 +107,12 @@ echo "rs,chr,ps,allele0,allele1,beta,se,p_wald,NA,af,NA,NA,TAB,$File,2500" >>  u
 done
 ```
 
-### Run Meta analyse pipeline 
+### Run Meta analysis pipeline 
 * input :
-  * user can choose software that he want to run : metal (`--metal 1`), gwama (`--gwama 1`), metasoft (` --metasoft 1`) MrMega (`--mrmega 1`) and plink (`--plink 1`)
+  * user can choose software that they want to run : metal (`--metal 1`), gwama (`--gwama 1`), metasoft (` --metasoft 1`) MrMega (`--mrmega 1`) and plink (`--plink 1`)
 
 ```
-nextflow run ~/Travail/git/h3agwas/meta/meta-assoc.nf   --metal 1 --gwama 1 --metasoft 1 --mrmega 1 --plink  1  --file_config utils/input_meta.csv -resume -profile slurmSingularity --output_dir meta
+nextflow run h3agwas/meta/meta-assoc.nf   --metal 1 --gwama 1 --metasoft 1 --mrmega 1 --plink  1  --file_config utils/input_meta.csv -resume -profile slurmSingularity --output_dir meta
 ```
 
 * output :
@@ -173,7 +174,7 @@ nextflow run  ~/Travail/git/h3agwas/finemapping/main.nf --head_pval p_wald --hea
 ### specific windows
 Algorithm is same than previous, but user must specify chro(`--chro`), and range position (`--begin_seq`, `--end_seq`)
 ```
-nextflow run  ~/Travail/git/h3agwas/finemapping/finemap_region.nf  --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --list_pheno "Type 2 diabetes" --input_dir  data/imputed/  --input_pat imput_data --file_gwas data/summarystat/all_pheno.gemma  --output_dir finemapping_pheno1_wind --output finemapping_pheno1 -resume  -profile slurmSingularity --begin_seq 112178657 --end_seq 113178657 --chro 10
+nextflow run h3agwas/finemapping/finemap_region.nf  --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --list_pheno "Type 2 diabetes" --input_dir  data/imputed/  --input_pat imput_data --file_gwas data/summarystat/all_pheno.gemma  --output_dir finemapping_pheno1_wind --output finemapping_pheno1 -resume  -profile slurmSingularity --begin_seq 112178657 --end_seq 113178657 --chro 10
 ```
 
 ###  GCTA-COJO: conditional and joint analysis using summary data 
@@ -184,7 +185,7 @@ pipeline of cojo used two type of input :
 
 #### Command line 
 ```
-nextflow run   ~/Travail/git/h3agwas/h3agwas/finemapping/cojo-assoc.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --input_dir data/imputed/  --input_pat imput_data  --output_dir cojo --data data/pheno/pheno_test.all --pheno pheno_qt1 --file_gwas data/summarystat/all_pheno.gemma  -resume   -profile slurmSingularity
+nextflow run  h3agwas/h3agwas/finemapping/cojo-assoc.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --input_dir data/imputed/  --input_pat imput_data  --output_dir cojo --data data/pheno/pheno_test.all --pheno pheno_qt1 --file_gwas data/summarystat/all_pheno.gemma  -resume   -profile slurmSingularity
 ```
 
 
@@ -202,7 +203,7 @@ input :
  * Annotation used annovar file, if you don't `list_file_annot` and `info_file_annot`, data will be downloaded
 
 ```
-nextflow run  ~/Travail/git/h3agwas/utils/annotation/main.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --input_dir data/imputed/  --input_pat imput_data --file_gwas data/summarystat/all_pheno.gemma  --output_dir annotation --list_rs "2:45832137:A:G,1:117539108:G:T" --data data/pheno/pheno_test.all --pheno pheno_qt1  -resume  -profile slurmSingularity --loczm_bin  "/dataE/AWIGenGWAS/shared/ResultGWAS/Ressource/locuszoom/bin/locuszoom"
+nextflow run  h3agwas/utils/annotation/main.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --input_dir data/imputed/  --input_pat imput_data --file_gwas data/summarystat/all_pheno.gemma  --output_dir annotation --list_rs "2:45832137:A:G,1:117539108:G:T" --data data/pheno/pheno_test.all --pheno pheno_qt1  -resume  -profile slurmSingularity --loczm_bin  "/dataE/AWIGenGWAS/shared/ResultGWAS/Ressource/locuszoom/bin/locuszoom"
 ```
 
 ## Simulation of phenotype and build phenotype
@@ -218,7 +219,7 @@ awk '{print $1"\t"$4}' data/array_plk/array.bim  > utils/list_posarray
 ```
 #### command line 
 ```
-nextflow run ~/Travail/git/h3agwas//utils/build_example_data/main.nf -profile slurmSingularity   --pos_allgeno utils/list_posarray -resume --nb_snp 3 --output_dir simul_gcta_main
+nextflow run h3agwas//utils/build_example_data/main.nf -profile slurmSingularity   --pos_allgeno utils/list_posarray -resume --nb_snp 3 --output_dir simul_gcta_main
 ```
 ### Output of pipeline:
 * `geno_all` : contains final  genotype
@@ -245,7 +246,7 @@ nextflow run ~/Travail/git/h3agwas//utils/build_example_data/main.nf -profile sl
 ### Simulation using gcta and data
 * algorithm is comparable to previous, but need genetic data in plink
 ```
-nextflow run ~/Travail/git/h3agwas/utils/build_example_data/simul-assoc_gcta.nf -profile slurmSingularity  --input_dir data/imputed/  --input_pat  imput_data --output_dir simul_gcta
+nextflow run h3agwas/utils/build_example_data/simul-assoc_gcta.nf -profile slurmSingularity  --input_dir data/imputed/  --input_pat  imput_data --output_dir simul_gcta
 
 ```
 
@@ -255,7 +256,7 @@ nextflow run ~/Travail/git/h3agwas/utils/build_example_data/simul-assoc_gcta.nf 
 * `--gemma 1` will run gemma after simulation of phenotype on genotype and phenotype
 #### Command line 
 ```
-nextflow run ~/Travail/git/h3agwas/utils/build_example_data/simul-assoc_phenosim.nf -profile slurmSingularity  --ph_normalise 0 --input_dir data/imputed/ --input_pat  imput_data --gemma 1
+nextflow run h3agwas/utils/build_example_data/simul-assoc_phenosim.nf -profile slurmSingularity  --ph_normalise 0 --input_dir data/imputed/ --input_pat  imput_data --gemma 1
 ```
 
 output :
@@ -272,7 +273,7 @@ output :
 
 
 ```
-nextflow run  ~/Travail/git/h3agwas/finemapping/cond-assoc.nf --input_dir data/imputed/  --input_pat imput_data --output_dir cond --data data/pheno/pheno_test.all --pheno pheno_qt1  -profile slurmSingularity  -resume  --chro_cond 17  --pos_ref 78562921 --pos_cond 78494969,78502076,78534842  --sample_snps_rel=1
+nextflow run  h3agwas/finemapping/cond-assoc.nf --input_dir data/imputed/  --input_pat imput_data --output_dir cond --data data/pheno/pheno_test.all --pheno pheno_qt1  -profile slurmSingularity  -resume  --chro_cond 17  --pos_ref 78562921 --pos_cond 78494969,78502076,78534842  --sample_snps_rel=1
 ```
 
 output :
@@ -305,7 +306,7 @@ input :
  * `--file_ref_gzip` : used to check ref alternatif or rsid
 
 ```
-nextflow run  ~/Travail/git/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --file_gwas data/summarystat/all_pheno.gemma  --output_dir format_assoc   -resume --headnew_pval p --headnew_bp bp --headnew_chr CHR --headnew_rs SNP --headnew_beta beta --headnew_se se --headnew_A1 allele1 --headnew_A2 allele0 --file_ref_gzip data/utils/all_rsinfo.init.gz --input_dir data/imputed/ --input_pat imput_data -profile slurmSingularity
+nextflow run  h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --file_gwas data/summarystat/all_pheno.gemma  --output_dir format_assoc   -resume --headnew_pval p --headnew_bp bp --headnew_chr CHR --headnew_rs SNP --headnew_beta beta --headnew_se se --headnew_A1 allele1 --headnew_A2 allele0 --file_ref_gzip data/utils/all_rsinfo.init.gz --input_dir data/imputed/ --input_pat imput_data -profile slurmSingularity
 ```
 
 
@@ -321,7 +322,7 @@ nextflow run  ~/Travail/git/h3agwas/formatdata/format_gwasfile.nf --head_pval p_
  cd utils_data/
  wget -c http://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz
  cd ../
- nextflow run ~/Travail/git//h3agwas/formatdata/vcf_in_plink.nf --file_listvcf utils/listvcf --output_pat  kgp_imputed --output_dir plink_imputed/   --reffasta utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz  -profile slurmSingularity
+ nextflow run h3agwas/formatdata/vcf_in_plink.nf --file_listvcf utils/listvcf --output_pat  kgp_imputed --output_dir plink_imputed/   --reffasta utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz  -profile slurmSingularity
 ```
 * output :
   * plink file clean :
@@ -333,7 +334,7 @@ nextflow run  ~/Travail/git/h3agwas/formatdata/format_gwasfile.nf --head_pval p_
 * bimbam used on same case as gemma 
 
 ```
-nextflow run ~/Travail/git//h3agwas/formatdata/vcf_in_bimbam.nf --file_listvcf utils/listvcf  --output_pat  kgp_imputed --output_dir bimbam/   -profile slurmSingularity
+nextflow run h3agwas/formatdata/vcf_in_bimbam.nf --file_listvcf utils/listvcf  --output_pat  kgp_imputed --output_dir bimbam/   -profile slurmSingularity
 ```
 
 
@@ -341,7 +342,7 @@ nextflow run ~/Travail/git//h3agwas/formatdata/vcf_in_bimbam.nf --file_listvcf u
 * can be used by fastGWA (gcta), bolt-lmm  for instance
 
 ```
-nextflow run ~/Travail/git//h3agwas/formatdata/vcf_in_bgen.nf --file_listvcf utils/listvcf --output_pat  exampledata2_imp --output_dir ./bgen -resume -profile slurmSingularity
+nextflow run h3agwas/formatdata/vcf_in_bgen.nf --file_listvcf utils/listvcf --output_pat  exampledata2_imp --output_dir ./bgen -resume -profile slurmSingularity
 ```
 
 * option where bgen split by chro :
@@ -353,7 +354,7 @@ nextflow run ~/Travail/git//h3agwas/formatdata/vcf_in_bgen.nf --file_listvcf uti
 * used for bolt-lmm
 
 ```
-nextflow ~/Travail/git/h3agwas/formatdata/vcf_in_impute2.nf --file_listvcf listvcf --output_pat  utils/exampledata2_imp --output_dir ./impute2 -profile slurmSingularity -resume
+nextflow h3agwas/formatdata/vcf_in_impute2.nf --file_listvcf listvcf --output_pat  utils/exampledata2_imp --output_dir ./impute2 -profile slurmSingularity -resume
 ```
 
 
@@ -363,7 +364,7 @@ pipeline of heritability estimation and co-heritatbility, can used two type of i
   * summary statistics :  `--file_gwas` one or more, and `--head_[lhead]`
 
 ```
-~/nextflow ~/Travail/git/h3agwas/heritabilities/main.nf \
+nextflow ru h3agwas/heritabilities/main.nf \
   --input_dir data/imputed/  --input_pat imput_data --data data/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
   --file_gwas data/summarystat/all_pheno.gemma,data/summarystat/all_phenoq2.gemma   --head_pval  "p_wald"  --head_freq  "af" --head_bp  "bp" --head_chr  "chr" --head_rs  "rs" --head_beta "beta" --head_se "se" --head_A1 "allele1" --head_A2 "allele0" --Nind 500,500 \
   --ldsc_h2 0 --ldsc_h2_multi 0 --bolt_h2 1 --bolt_h2_multi 1 --gcta_h2 0 --gcta_h2_imp 0 --gcta_h2_multi 0 --gemma_h2 1 --gemma_h2_pval 1 -resume --output_dir heritability/ -profile slurmSingularity
@@ -376,7 +377,7 @@ pipeline of heritability estimation and co-heritatbility, can used two type of i
  * also you can give nformation relative to : ` --input_dir data/imputed/ --input_pat imput_data --pheno pheno_qt1,pheno_qt2 --data data/pheno/pheno_test.all `, can add N value to each summary statistic
 
 ```
-nextflow h3abionet/h3agwas/meta/mtag-assoc.nf --head_freq af --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --input_dir data/imputed/ --input_pat imput_data --file_gwas  data/summarystat/all_pheno.gemma,data/summarystat/all_phenoq2.gemma --pheno pheno_qt1,pheno_qt2 --data data/pheno/pheno_test.all -resume   -profile slurmSingularity
+nextflow run h3abionet/h3agwas/meta/mtag-assoc.nf --head_freq af --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --input_dir data/imputed/ --input_pat imput_data --file_gwas  data/summarystat/all_pheno.gemma,data/summarystat/all_phenoq2.gemma --pheno pheno_qt1,pheno_qt2 --data data/pheno/pheno_test.all -resume   -profile slurmSingularity
 ```
 
 ## conversion of positions  between build
