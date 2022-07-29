@@ -1,4 +1,4 @@
-FID	IID	pop	super_pop	gender1000G	Sex	SexChange	Family.ID	phenoqc_ql	pheno_qt1	pheno_qt2	gc10	batch
+FID	IID	pop	super_pop	sex1000G	Sex	SexChange	Family.ID	phenoqc_ql	pheno_qt1	pheno_qt2	gc10	batch
 HG00436	HG00436	CHS	EAS	male	1	FALSE	SH012	2	-2.02073	-1.268	2.26295100165518	1
 HG00472	HG00472	CHS	EAS	male	1	FALSE	SH024	1	2.54875	4.93679	1.57460886230715	2
 HG00530	HG00530	CHS	EAS	male	1	FALSE	SH038	1	0.0864864	-4.19469	-0.139424655509147	1

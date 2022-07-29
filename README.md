@@ -2,10 +2,16 @@
 
 Example and command line to run [h3agwas pipeline](https://github.com/h3abionet/h3agwas)
 
-## Dataset built 
-* Dataset has been build using 1000 Genomes Project data, selecting  50,000 SNPs found in the H3Africa Custom Chip Array and 500 individuals. Description and explanation can be found [here](README_buildataset.md) or bash script [here](builddata_set.bash)
+These are very simple examples to show working of the pipeline and get you started.
+These examples show the basic working of some of the key sub-workflows only. We can't show all options here -- see the main documentation for more.
 
-## Data directory :
+
+# 1. Set-up
+
+
+A dataset has been build using 1000 Genomes Project data, selecting  50,000 SNPs found in the H3Africa Custom Chip Array and 500 individuals. Description and explanation can be found [here](README_buildataset.md) or bash script [here](builddata_set.bash)
+
+## 1.1  Data directory :
 * The data set can be found in [data folder](data), subfolder :
  * `data/array_plk/`: contains file for qc in plink format
  * `imputed` : contains file for gwas in plink format
@@ -14,30 +20,48 @@ Example and command line to run [h3agwas pipeline](https://github.com/h3abionet/
    * IID : Individual ID 
    * `super_pop` : super-population used to split population
    * Sex : sex after randomisation
-   * gender1000G : sex of individual 1000 Genome
+   * sex1000G : sex of individual 1000 Genome
    * SexChange : False : mean sex phenotype is sex genotype T / TRUE : mean sex phenotype is different than sex Genotype. pipeline had change sex phenotype to created example for qc
-   * phenoqc\_ql : binary phenotype used fo
+   * phenoqc\_ql : binary phenotype used 
    * pheno\_qt[12] : quantitative phenotype used for GWAS
  * `summarystat/[pop]_pheno.gemma` : result of GWAS using GEMMA for phenotype 1
  * `summarystat/all_phenoq2.gemma` : result of GWAS using gwas for phenotype 2 and all
  * `utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of [its file](ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/All_20180423.vcf.gz)
- 
 
-## Quality control 
 
-After calling Illumina data and formatting in plink file, qc must be appypipeline need :
+## 1.2  To run these examples
+
+1. Fetch or update the workflow itself `nextflow pull h3abionet/h3agwas`
+2. Clone the example directory: `git clone h3abionet/h3agwas-examples`
+3. Change your working directory so you are in the new directory `cd h3agwas-examples`
+4. You need to have have Singularity or Docker installed (or install all the software tools yourself)
+
+
+# 2. Quality control 
+
+The first example takes raw PLINK data as input (that is data that comes after genotype calling) and performs quality control. The `qc` workflow is used. The key parameters are
 * input / output :
  * `--input_dir` specifies directory where data can be found
  * `--input_pat` specifies the base of the PLINK bed, bim and fam file name
  * `--output_dir` corresponding at the directory output directory 
 
+
+In this example, we run QC on the raw data found in `data/array_plk/array`
+
 ```
-nextflow run h3agwas/qc/main.nf --input_dir data/array_plk  --input_pat array --ouput_dir qc  --output kgpexample \
+nextflow run h3abionet/h3agwas/qc/main.nf --input_dir data/array_plk  --input_pat array --output_dir qc  --output kgpexample \
  --phenotype data/pheno/pheno_test.all --pheno_col phenoqc_ql \
  --case_control data/pheno/pheno_test.all --case_control_col Sex \
  --batch data/pheno/pheno_test.all --batch_col batch \
- -profile slurmSingularity -resume
+ -profile singularity -resume
 ```
+
+The `-profile` option asks for the use of Singularity. The first time you run the workflow, Nextflow will automatically download all the singularity images -- and this may take a few minutes (this only happens the first time and there's nothing special you have to do other than be patient). If you want to use Docker instead of Singularity you would say `-profile docker`. If you want to use both Singularity and a scheduler like slurm you say in this order `-profile singularity,slurm`.
+
+
+In the QC we look for batch (broadly understood) effects in 3 ways (you don't have to do such a complex analysis). We check for batch effects of the `phenoqc_ql` phenotype, sex of individuals, and the batch from which the sample came. Default QC cut-offs for missingness found in the `nextflow.config` file are used.
+
+Output goes to the `qc/` directory with `kgexample` as base for file names.. 
 
 * output :
   * `$dir_output/$output.[bed/fam/bim]` : PLINK files with resulting QC data
@@ -45,40 +69,70 @@ nextflow run h3agwas/qc/main.nf --input_dir data/array_plk  --input_pat array --
   * `$dir_output/pca/` : contains figure and plink file used 
   * `$dir_output/samples/` : contains figures, files relative to qc apply to sample
   * `$dir_output/snps/` : contains figures, files relative to qc apply to SNPs
-  * `$dir_output/phase1//` : contains figures, files relative to qc apply at phase 1 of qc
+  * `$dir_output/phase1/` : contains figures, files relative to qc apply at phase 1 of qc
 
-## Association pipeline 
-Pipeline offer various software for association  :
+The PDF file gives the report of the QC. Note that because this is such a small and artificial file some of the pictures will look very odd.
+
+
+# 3. Association pipeline
+
+The pipeline offers multiple ways of testing for association. Only some examples:
+
  * pipeline needs at least the PLINK  (see `--input_dir` and `--input_pat`), phenotype file (see `--data`) and 1 or more phenotype (`--phenotype`)
- * optional optional :
-  * for format see table below  
-  *  `--sample_snps_rel 1` : to build relatedness, sub select snps independant using plink
+
+Here's a simple example, assuming you've done the QC example above and haven't changed working directory.  We take the QCed data as genotype input, and the data in `data/pheno/pheno_test.all` as the source of the phenotype data. There are two columns in the phenotype file (`pheno_qt1`, `pheno_qt2`) and we'll test for associations against both. We specify which directory and base file name to use for output. We do linear regression. We use singularity.
 
 ```
-nextflow run h3agwas/assoc --input_dir data/imputed/ --input_pat imput_data \
+nextflow run  h3abionet/h3agwas/assoc/main.nf --input_dir qc/    --input_pat kgpexample  --data data/pheno/pheno_test.all   --pheno pheno_qt1,pheno_qt2  --output_dir assoc1 --output qt12 --linear 1 -profile  singularity
+```
+
+Now we do a more complex example, adding on to this
+  * We use imputed data as input
+  * We do linear regression and GEMMA
+  * `--sample_snps_rel 1` : builds a relatedness matrix sub-sampling SNPs
+  * We used dosage data in BGEN format
+
+```
+nextflow run h3abionet/h3agwas/assoc/main.nf \
+ --input_dir data/imputed/ --input_pat imput_data \
  --data data/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
  --output_dir assoc --output assoc \
- --gemma 1 --assoc 1 --sample_snps_rel 1 --linear 1 \ 
-  -profile slurmSingularity \
+ --gemma 1 --sample_snps_rel 1 --linear 1 \ 
+  -profile singularity \
  --bgen data/imputed/bgen/out.bgen --bgen_sample data/imputed/bgen/out.sample
 ```
 
-* output :
+Output :
   * [in the report, we combined best results, manhantan plot and qq plot](out_example/assoc-report.pdf) 
   * Each software as in own folder with output of software
 
-* example with `list_bgen` arguments
+
+In the next example, we have separate BGEN files as input -- we can analyse them use the `list_bgen` option.  Here we also use BOLTLMM, FASTGWA and RGENIE. There are some advanced options given for these tools
 ```
 ls data/imputed/bgen_chro/*.bgen > listbgen
 nextflow run h3agwas/assoc --input_dir data/imputed/ --input_pat input_data \
  --data data/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
  --output_dir assoc_listbgen --output assoc \
  --boltlmm 1 --sample_snps_rel 1 --regenie 1 --fastgwa 1 --grm_nbpart 2\
-  -profile slurmSingularity \
+  -profile singularity \
  --list_bgen listbgen --bgen_sample data/imputed/bgen/out.sample --saige 1 -resume
 ```
 
-### Information relative to software
+## 3.1 Input types for different tools
+
+
+The table below shows the different data types, the information they store and how referenced.
+
+| plink | vcf | bgen | impute 2 | 
+| genotype |  dosage | dosage | dosage |
+| --- | --- | --- | 
+| `--input_dir`/`--input_pat`| `--list_vcf` | `--list_bgen`/ `--bgen`/`--bgen_sample` | `bolt_impute2filelist`/`bolt_impute2fidiid` |
+| --- | --- | --- | 
+
+
+The table below shows different data types used as input for the supported tools and the command used to activate
+
+
 | Software | plink | vcf | bgen | impute 2 | option to activate |
 | --- | --- | --- | --- | --- | --- |
 | gemma | yes |  no | no | no | --gemma  / --gemma\_gxe |
@@ -89,37 +143,32 @@ nextflow run h3agwas/assoc --input_dir data/imputed/ --input_pat input_data \
 | fast-lmm | yes |  no | no | no | --fastlmm 1 |
 | regenie | yes |  no | yes | no | --regenie 1 |
 | --- | --- | --- | --- | --- |
-| description | genotype |  dosage | dosage | dosage | |
-| --- | --- | --- | --- | --- |
-| Option | `--input_dir`/`--input_pat`| `--list_vcf` | `--list_bgen`/ `--bgen`/`--bgen_sample` | `bolt_impute2filelist`/`bolt_impute2fidiid` |
-| --- | --- | --- | --- | --- |
 
-## Meta Analysis
+# 4.  Meta Analysis
 
-### build input file 
-* a csv file need to described each input, contains header for each file 
+### Build  an input file 
+* a csv file is need to described each input, with an appropriate headerls data/summarystat/*.gemma
 
 ```
 echo "rsID,Chro,Pos,A1,A2,Beta,Se,Pval,N,freqA1,direction,Imputed,Sep,File,Ncount" > utils/input_meta.csv
-for File in `ls data/summarystat/*.gemma|grep -v ".all"`
-do
-echo "rs,chr,ps,allele0,allele1,beta,se,p_wald,NA,af,NA,NA,TAB,$File,2500" >>  utils/input_meta.csv
+for File in `ls data/summarystat/{AFR,AMR,EAS,EUR,SAS}*.gemma`; do
+   echo "rs,chr,ps,allele0,allele1,beta,se,p_wald,NA,af,NA,NA,TAB,$File,2500" >>  utils/input_meta.csv
 done
 ```
 
-### Run Meta analysis pipeline 
+### Run the meta-analysis pipeline 
 * input :
   * user can choose software that they want to run : metal (`--metal 1`), gwama (`--gwama 1`), metasoft (` --metasoft 1`) MrMega (`--mrmega 1`) and plink (`--plink 1`)
 
 ```
-nextflow run h3agwas/meta/meta-assoc.nf   --metal 1 --gwama 1 --metasoft 1 --mrmega 1 --plink  1  --file_config utils/input_meta.csv -resume -profile slurmSingularity --output_dir meta
+nextflow run h3abionet/h3agwas/meta/meta-assoc.nf   --metal 1 --gwama 1 --metasoft 1 --mrmega 1 --plink  1  --file_config utils/input_meta.csv -resume -profile singularity --output_dir meta
 ```
 
 * output :
   * Each software as in own folder 
   * [Same report than association is generated](out_example/meta_report.pdf)
 
-### Software meta analyse and option
+### Options for the meta-analysis software
 
 | Software | `ma_genomic_cont` | `ma_inv_var_weigth` | `ma_overlap_sample` | `ma_random_effect` |
 | --- | --- | --- | --- | --- |
@@ -135,9 +184,9 @@ nextflow run h3agwas/meta/meta-assoc.nf   --metal 1 --gwama 1 --metasoft 1 --mrm
 1 'weighted-z' requests weighted Z-score-based p-values (as computed by the Abecasis Lab's METAL software)
 
 
-## Finemapping
+# 5. Finemapping
 
-Fine Mapping can be run on full summary statistics, or specific windows using two different script, furthermore on script has been done to just do a gcta
+Fine-mapping can be run on full summary statistics, or specific windows using two different script. Furthermore there is a  script which just does GCTA.
 
 ### general option :
 * 
@@ -159,11 +208,11 @@ Fine Mapping can be run on full summary statistics, or specific windows using tw
  `--threshold_p` : by default to 5e-8
 
 
-### full summary statistics
+### Full summary statistics
 * pipeline will apply clump to defined significant positions and run for each windows various software of fine mapping 
 
 ```
-nextflow run  ~/Travail/git/h3agwas/finemapping/main.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --list_phenogc "Type 2 diabetes" --input_dir  data/imputed/  --input_pat imput_data --file_gwas data/summarystat/all_pheno.gemma  --output_dir finemapping_pheno1 --output finemapping_pheno1 -resume  -profile slurmSingularity
+nextflow run  h3abionet/h3agwas/finemapping/main.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --list_phenogc "Type 2 diabetes" --input_dir  data/imputed/  --input_pat imput_data --file_gwas data/summarystat/all_pheno.gemma  --output_dir finemapping_pheno1 --output finemapping_pheno1 -resume  -profile slurmSingularity
 ```
 * output :
   * folder output contains for each independant SNPs a folder with result :
