@@ -1,4 +1,4 @@
-FID	IID	pop	super_pop	gender1000G	Sex	SexChange	Family.ID	phenoqc_ql	pheno_qt1	pheno_qt2	gc10	batch
+FID	IID	pop	super_pop	sex1000G	Sex	SexChange	Family.ID	phenoqc_ql	pheno_qt1	pheno_qt2	gc10	batch
 HG01880	HG01880	ACB	AFR	female	2	FALSE	BB01	1	-12.1484	-13.174	1.50210188608158	1
 HG01882	HG01882	ACB	AFR	male	1	FALSE	BB02	1	16.5955	15.4982	1.47999146059846	3
 HG01890	HG01890	ACB	AFR	male	1	FALSE	BB05	1	-0.926392	3.86793	2.08469946700147	3

@@ -1,4 +1,4 @@
-FID	IID	pop	super_pop	gender1000G	Sex	SexChange	Family.ID	phenoqc_ql	pheno_qt1	pheno_qt2	gc10	batch
+FID	IID	pop	super_pop	sex1000G	Sex	SexChange	Family.ID	phenoqc_ql	pheno_qt1	pheno_qt2	gc10	batch
 HG01589	HG01589	PJL	SAS	male	1	FALSE	PK04	2	-19.4169	-17.0855	2.77621716809904	1
 HG02648	HG02648	PJL	SAS	male	1	FALSE	PK11	1	4.37423	6.98747	2.22032372876568	1
 HG02654	HG02654	PJL	SAS	male	1	FALSE	PK13	1	24.3411	21.8568	-0.50672895690443	3

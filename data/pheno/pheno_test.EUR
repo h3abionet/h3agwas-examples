@@ -1,4 +1,4 @@
-FID	IID	pop	super_pop	gender1000G	Sex	SexChange	Family.ID	phenoqc_ql	pheno_qt1	pheno_qt2	gc10	batch
+FID	IID	pop	super_pop	sex1000G	Sex	SexChange	Family.ID	phenoqc_ql	pheno_qt1	pheno_qt2	gc10	batch
 HG00099	HG00099	GBR	EUR	female	2	FALSE	HG00099	2	-1.25483	3.31251	-0.122181462770146	3
 HG00112	HG00112	GBR	EUR	male	1	FALSE	HG00112	1	-1.81819	-1.60647	0.85832827302342	3
 HG00114	HG00114	GBR	EUR	male	1	FALSE	HG00114	1	8.19154	12.5608	0.747860899281371	1
