@@ -224,18 +224,20 @@ nextflow run  h3abionet/h3agwas/finemapping/main.nf --head_pval p_wald --head_bp
 Algorithm is same than previous, but user must specify chro(`--chro`), and range position (`--begin_seq`, `--end_seq`)
 ```
 nextflow run h3agwas/finemapping/finemap_region.nf  --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --list_pheno "Type 2 diabetes" --input_dir  data/imputed/  --input_pat imput_data --file_gwas data/summarystat/all_pheno.gemma  --output_dir finemapping_pheno1_wind --output finemapping_pheno1 -resume  -profile slurmSingularity --begin_seq 112178657 --end_seq 113178657 --chro 10
->>>>>>> 7ffdd3c9b4744a9129677eba0372417f3e8ffcfc
 ```
 
 ###  GCTA-COJO: conditional and joint analysis using summary data 
 pipeline of cojo used two type of input :
   * plink file + phenotype with `--input_dir`, `--input_pat`, `--data` and `--pheno`
   * summary statistics :  `--file_gwas` one or more, and `--head_[lhead]`
-  * will run cojo on each chromosome 
+  * command line :
+    * run cojo on each chromosome 
+    * for each chromosome take best snp (`--cojo_top_snps_chro 1`)
+  
 
 #### Command line 
 ```
-nextflow run  h3agwas/h3agwas/finemapping/cojo-assoc.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --input_dir data/imputed/  --input_pat imput_data  --output_dir cojo --data data/pheno/pheno_test.all --pheno pheno_qt1 --file_gwas data/summarystat/all_pheno.gemma  -resume   -profile slurmSingularity
+nextflow run h3agwas/finemapping/cojo-assoc.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --input_dir data/imputed/  --input_pat imput_data  --output_dir cojo --data data/pheno/pheno_test.all --pheno pheno_qt1 --file_gwas data/summarystat/all_pheno.gemma  -resume   -profile slurmSingularity --cojo_top_snps_chro 1
 ```
 
 
