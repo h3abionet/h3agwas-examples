@@ -118,16 +118,16 @@ nextflow run h3agwas/assoc --input_dir data/imputed/ --input_pat input_data \
  --list_bgen listbgen --bgen_sample data/imputed/bgen/out.sample --saige 1 -resume
 ```
 
-## 3.1 Input types for different tools
+## Input types for different tools
 
 
 The table below shows the different data types, the information they store and how referenced.
 
-| plink | vcf | bgen | impute 2 | 
+| plink | vcf | bgen | impute 2 |
 | genotype |  dosage | dosage | dosage |
-| --- | --- | --- | 
+| --- | --- | --- | --- |
 | `--input_dir`/`--input_pat`| `--list_vcf` | `--list_bgen`/ `--bgen`/`--bgen_sample` | `bolt_impute2filelist`/`bolt_impute2fidiid` |
-| --- | --- | --- | 
+| --- | --- | --- |
 
 
 The table below shows different data types used as input for the supported tools and the command used to activate
