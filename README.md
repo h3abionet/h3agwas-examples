@@ -123,10 +123,10 @@ nextflow run h3agwas/assoc --input_dir data/imputed/ --input_pat input_data \
 
 The table below shows the different data types, the information they store and how referenced.
 
-| plink | vcf | bgen | impute 2 |
-| genotype |  dosage | dosage | dosage |
-| --- | --- | --- | --- |
-| `--input_dir`/`--input_pat`| `--list_vcf` | `--list_bgen`/ `--bgen`/`--bgen_sample` | `bolt_impute2filelist`/`bolt_impute2fidiid` |
+|     | plink | vcf | bgen | impute 2 |
+| | genotype |  dosage | dosage | dosage |
+| --- | --- | --- | --- | --- |
+| Option |  `--input_dir`/`--input_pat`| `--list_vcf` | `--list_bgen`/ `--bgen`/`--bgen_sample` | `bolt_impute2filelist`/`bolt_impute2fidiid` |
 | --- | --- | --- |
 
 
