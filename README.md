@@ -147,7 +147,15 @@ The table below shows different data types used as input for the supported tools
 # 4.  Meta Analysis
 
 ### Build  an input file 
-* a csv file is need to described each input, with an appropriate headerls data/summarystat/*.gemma
+* a csv file is need to described each input, with an appropriate header
+
+There are some pre-computed GEMMA output files we'll use in this example
+
+```
+ls data/summarystat/*.gemma
+```
+
+We create a file `input_meta.csv" with the file information
 
 ```
 echo "rsID,Chro,Pos,A1,A2,Beta,Se,Pval,N,freqA1,direction,Imputed,Sep,File,Ncount" > utils/input_meta.csv
@@ -156,16 +164,18 @@ for File in `ls data/summarystat/{AFR,AMR,EAS,EUR,SAS}*.gemma`; do
 done
 ```
 
-### Run the meta-analysis pipeline 
-* input :
-  * user can choose software that they want to run : metal (`--metal 1`), gwama (`--gwama 1`), metasoft (` --metasoft 1`) MrMega (`--mrmega 1`) and plink (`--plink 1`)
+### Run the meta-analysis pipeline
+
+* input :  user can choose software that they want to run : metal (`--metal 1`), gwama (`--gwama 1`), metasoft (` --metasoft 1`) MrMega (`--mrmega 1`) and plink (`--plink 1`)
 
 ```
+
 nextflow run h3abionet/h3agwas/meta/meta-assoc.nf   --metal 1 --gwama 1 --metasoft 1 --mrmega 1 --plink  1  --file_config utils/input_meta.csv -resume -profile singularity --output_dir meta
+
 ```
 
 * output :
-  * Each software as in own folder 
+  * Each software in oits wn folder 
   * [Same report than association is generated](out_example/meta_report.pdf)
 
 ### Options for the meta-analysis software
@@ -184,28 +194,30 @@ nextflow run h3abionet/h3agwas/meta/meta-assoc.nf   --metal 1 --gwama 1 --metaso
 1 'weighted-z' requests weighted Z-score-based p-values (as computed by the Abecasis Lab's METAL software)
 
 
-# 5. Finemapping
+# 5. Fine-mapping
 
-Fine-mapping can be run on full summary statistics, or specific windows using two different script. Furthermore there is a  script which just does GCTA.
+Fine-mapping can be run on full summary statistics, or specific windows using two different scripta. There is also a  script which just does GCTA.
 
-### general option :
-* 
+There are a number of general options.
+
+First, we expect the summary statistics file(s) to have column headers. There are options that associated the column  headers with the the input values that the workflow expects
+
+
 * header of summary statistics :
-  * `--head_pval` PVALUE
-  * `--head_bp` Positions
+  * `--head_pval`  _p_-value of SNP
+  * `--head_bp` position where SNP is
   * `--head_chr` Chromosome
   * `--head_rs` rs id of phenotype file
   * `--head_beta` effect on file 
-  * `--head_se` Standart error 
-  * `--head_A1` Effect allele
-  * `--head_A2` other allele
+  * `--head_se` standard error 
+  * `--head_A1` effect of A1 allele
+  * `--head_A2` effect of other allele
 * Software :
   * by default all software will be run
 * phenotype of gwas catalog:
   * `--list_phenogc`
   * `gwascat`
-* significant treshold :
- `--threshold_p` : by default to 5e-8
+* significant threshold -- `--threshold_p` : by default to $5\times 10^{-8}$
 
 
 ### Full summary statistics
