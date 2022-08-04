@@ -127,7 +127,7 @@ The table below shows the different data types, the information they store and h
 | | genotype |  dosage | dosage | dosage |
 | --- | --- | --- | --- | --- |
 | Option |  `--input_dir`/`--input_pat`| `--list_vcf` | `--list_bgen`/ `--bgen`/`--bgen_sample` | `bolt_impute2filelist`/`bolt_impute2fidiid` |
-| --- | --- | --- | --- | --- |
+
 
 
 The table below shows different data types used as input for the supported tools and the command used to activate
