@@ -281,6 +281,7 @@ nextflow run  h3abionet/h3agwas/utils/annotation/main.nf --head_pval p_wald --he
 
 The algorithm will use  the GWAS Catalog (default) and lead position to define position to build phenotype and gcta. The input required is a list of position for the genotype positions.
 
+# 7.1 Basic operation
 Key options
 * `--list_vcf`:  If you provie a value for the `--list_vcf` option, the genotype data will be extracted from the given VCF file. If this option is not provided, then the data will be generated from 1000 Genomes Data
 * `nb_snp` : snp number used to build phenotype
@@ -299,7 +300,7 @@ We can then execute the workflow:
 nextflow run h3abionet/h3agwas/utils/build_example_data/main.nf -profile singularity   --pos_allgeno utils/list_posarray -resume --nb_snp 3 --output_dir simul_gcta_main
 ```
 
-## 7.1  Output of pipeline:
+### Output of pipeline
 * `geno_all` : contains final  genotype
   * `geno_all/$output[.bed/fam/bim]` : plink file contains positions from array
   * `geno_all/$output_sex` : sex of individual after random
