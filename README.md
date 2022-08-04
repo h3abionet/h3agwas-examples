@@ -350,12 +350,14 @@ output :
 # 8. Conditional analysis using gemma
 
 
-To perform a conditional analysis, using gemma where positions is used as covariable of the phenotype and check pos_ref (`--pos_ref`) is link or indepependant  , argument same than gwas for gemma where you need to add :
+To perform a conditional analysis using gemma, we use come SNPs (positions) as covariate of the phenotype and the workflow seems is the specified positions (`--pos_ref`) are linked or indepependant.
+
+The arguments are the same as gwas using gemma but you need to add :
  *  pipeline will run a raw gwas using phenotype and covariable and after performed gwas using genotypes of each position from `pos_cond` as covariable
  * `chro_cond` : chro where `pos_cond` and `pos_ref`
  * `pos_ref` : pos will be tested for independance or not to `pos_cond`
- * `pos_cond` : list of position as conditional to verify indpendance with `pos_ref`, include as covariable
-* pipeline will compute ld 
+ * `pos_cond` : list of position as conditional to verify independance with `pos_ref`, include as covariate
+The pipeline will compute LD 
 
 
 ```
@@ -384,7 +386,7 @@ output :
  * `out.pdf` : barplot of -log10(p\_wald), condition or not 
 
 
-# 8. Change format of files
+# 9. Change format of files
 
 input :
  *  new and old header, will be replaced
