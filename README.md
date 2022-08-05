@@ -259,7 +259,7 @@ nextflow run h3abionet/h3agwas/finemapping/cojo-assoc.nf --head_pval p_wald --he
 
 
 
-#6. Annotating data 
+# 6. Annotating data 
 
 
 **Warning**
@@ -387,9 +387,12 @@ output :
 
 
 # 9. Format summary statistics, prepared data for imputation, or format data after imputation
+
 ## 9.1 format summary statistics
-Scrip formating summary statistic, replaced header and 
-input :
+
+The `format_gwasfile.nf' script formats summary statistics, replaces header information
+
+*Input* :
  *  new and old header, will be replaced
  * `input_dir` and `input_pat` : rename rsid in function of plink file
  * `--file_ref_gzip` : used to check ref alternatif or rsid
@@ -399,17 +402,18 @@ nextflow run  h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald
 ```
 
 
-## 9.1 Format vcf file after imputation in _plink_ file
+## 9.2 Format vcf file after imputation to  _plink_ format
+
 * format file vcf come from to imputaion and produce a report with distribution of score and frequency
-* option of interrest: 
- * `--file_listvcf` : file contains list of file vcf
+* options of interest: 
+ * `--file_listvcf` : file contains list of VCF files
  * `--output_pat` : output pattern of plink file 
  * `--output_dir` : output direction where you file 
  * `--reffasta` : reference in fasta format
  * `--score_imp` : score imputation, depend of your imputation software [default: INFO]
  * `--min_scoreinfo` : minimum score [default : 0.6]
  
-###9.1.1 example from sanger imputation panel
+### 9.2.1 Example from Sanger imputation panel
 ```
  ls data/imputed/vcf/*.vcf.gz  > utils/listvcf
  mkdir -p utils_data/
@@ -419,25 +423,30 @@ nextflow run  h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald
  nextflow run h3abionet/h3agwas/formatdata/vcf_in_plink.nf --file_listvcf utils/listvcf --output_pat  kgp_imputed --output_dir plink_imputed/   --reffasta utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz  -profile singularity
 ```
 
-###9.1.2 example from michigan imputation with genetic map
+
+### 9.2.2 Example from Michigan Imputation with genetic map
+
 
 * file are zip with a password
 * score imputation _R2_
 * if you want to add genetics map in plink option you can used `https://zenodo.org/record/6422542/files/genetic_map_hg19.txt?download=1` 
+
 ```
 nextflow run h3abionet/h3agwas/formatdata/vcf_in_plink.nf --file_listvcf $ListVCF --min_scoreinfo 0.4 -profile slurm --output_pat 1000G_imp_mich --output_dir 1000G_imp_mich --genetic_maps genetic_map_hg19.txt --plink_mem_req 10GB -resume --big_time 1000h  --score_imp R2 --other_mem_req 20GB --reffasta hs37d5.fa.gz --unzip_zip 1 --unzip_password "xxx" --statfreq_vcf "%AF"
 ```
 
-* output :
+Output :
   * plink file 
   * report contains distribution of frequency and score info [example of report](out_example/KGPH3abionet_imputed_report.pdf)
-* [other example](README_buildataset.md)
+
+Look at this  [other example](README_buildataset.md) 
 
 
-##9.2 format file vcf in bimbam
+## 9.3 Format VCF file in bimbam format
 
-bimbam are dosage used for instance in gemma (not implemented in pipeline), we used _qctools (v2)_ and bcftools to format
-* input option :
+bimbam files contain dosage data used, for instance in gemma. Our pipeline does not use bimbam in this case, but some users may find this useful. The pipeline  uses _qctools (v2)_ and bcftools for format
+
+
   * `--file_listvcf` : file contains list of file vcf
   * `--output_pat` : output pattern of plink file
   * `--output_dir` : output direction where you file
@@ -451,10 +460,11 @@ bimbam are dosage used for instance in gemma (not implemented in pipeline), we u
 nextflow run h3abionet/h3agwas/formatdata/vcf_in_bimbam.nf --file_listvcf utils/listvcf  --output_pat  kgp_imputed --output_dir bimbam/   -profile singularity
 ```
 
-##9.3 format file vcf in bgen
+## 9.4 Format  VCF  file in  BGEN format
 
-Format bgen is dosage format used by _fastgwa_, _bolt-lmm_ or _regenie_ 
-* input option :
+The BGEN Format is a dosage format used by _fastgwa_, _bolt-lmm_ or _regenie_ 
+
+*Input option*:
   * `--file_listvcf` : file contains list of file vcf
   * `--output_pat` : output pattern of plink file
   * `--output_dir` : output direction where you file
@@ -462,34 +472,40 @@ Format bgen is dosage format used by _fastgwa_, _bolt-lmm_ or _regenie_
   * `--min_scoreinfo` : minimum score [default : 0.6]
 * bcftools are used to filter vcf and qctools (v2) for format in bgen
 
-###9.3.1 each vcf independant
 
-each vcf are filter independantly, merge and format in bgen
+### 9.4.1 Each vcf files independently
+
+Each VCF files is  filtered independently; they are then merged and formatted in BGEN formay
+
 ```
 nextflow run h3abionet/h3agwas/formatdata/vcf_in_bgen.nf --file_listvcf utils/listvcf --output_pat  exampledata2_imp --output_dir ./bgen -resume -profile singularity
 ```
 
-###9.3.2 merge vcf and format vcf merge in bgen
 
-each vcf are filter independantly, merge and final file is format in bgen
-```
-~/nextflow run h3abionet/h3agwas/formatdata/vcf_in_bgen_merge.nf --output_dir bgen_v3 --output all  -profile singularity --file_listvcf listvcf -resume
-```
+### 9.4.2 Merge VCF files and reformat
 
-###9.3.3 format each vcf in bgen and merge
-
-each vcf are filter and format in bgen and all bgen are merge, 
+Each vcf is filtered independantly; they are merged and the  final file is refromatten
 
 ```
-~/nextflow run h3abionet/h3agwas/formatdata/vcf_in_bgen_merge.nf --output_dir bgen_v3 --output all  -profile singularity --file_listvcf listvcf -resume
+nextflow run h3abionet/h3agwas/formatdata/vcf_in_bgen_merge.nf --output_dir bgen_v3 --output all  -profile singularity --file_listvcf listvcf -resume
+```
+
+### 9.4.3 Format first, and reformat
+
+Each vcf is filtered reformatted in BGEN; all bgen are then merged
+
+
+```
+nextflow run h3abionet/h3agwas/formatdata/vcf_in_bgen_merge.nf --output_dir bgen_v3 --output all  -profile singularity --file_listvcf listvcf -resume
 ```
 
 
-###9.4 format each vcf in impute2 format 
 
-dosage format used by bolt-lmm
+### 9.5 Format vcf in IMPUTE2 format
 
-* input option :
+Dosage format for `bolt-lmm`
+
+** Input option** :
   * `--file_listvcf` : file contains list of file vcf
   * `--output_pat` : output pattern of plink file
   * `--output_dir` : output direction where you file
@@ -497,24 +513,25 @@ dosage format used by bolt-lmm
   * `--min_scoreinfo` : minimum score [default : 0.6]
 
 
+
 ```
 nextflow h3abionet/h3agwas/formatdata/vcf_in_impute2.nf --file_listvcf listvcf --output_pat  utils/exampledata2_imp --output_dir ./impute2 -profile singularity -resume
 ```
 
 
-##10 Heritability and co-heritability estimation
+## 10 Heritability and co-heritability estimation
 
-pipeline of heritability, can used summary statistics or genetics data to estimated heritability estimation and co-heritatbility :
-* with genetics data and phenotye :
-    *`--input_dir`, `--input_pat`, `--data`, `--pheno`  `covariates`
+The heritability pipeline can use summary statistics or genetics data for heritability  and co-heritatbility estimation: 
+
+* With genetics data and phenotye :
+    * `--input_dir`, `--input_pat`, `--data`, `--pheno`  `covariates`
 * summary statistics :  `--file_gwas` one or more separated by a comma, and `--head_[lhead]`
-* list of software :
- * summary statitics (ldsc or gemma):
+* software options (ldsc or gemma):
   * `--ldsc_h2 1` : performed ldsc 
-  * `--ldsc_h2_multi 1` : to do co heritability (must be have more than 1 file_gwas)
+  * `--ldsc_h2_multi 1` : to do co heritability (must be have more than one file_gwas)
   * `--gemma_h2_pval 1` : performed gemma using summary statistics
-  * `--Nind` : individu number (if not in summary statitics, if more than 1 studies, separated by a comma)
- * genetics and phenotype :
+  * `--Nind` : number of individuals (if not in summary statitics, if more than 1 studies, separated by a comma)
+* genetics and phenotype :
   * `--gemma_h2 1` : using gemma
   * `--gcta_h2 1` : using gcta
   * `--gcta_h2_multi` : gcta and computed co - heritability
@@ -527,40 +544,57 @@ nextflow run h3abionet/h3agwas/heritabilities/main.nf \
   --file_gwas data/summarystat/all_pheno.gemma,data/summarystat/all_phenoq2.gemma   --head_pval  "p_wald"  --head_freq  "af" --head_bp  "bp" --head_chr  "chr" --head_rs  "rs" --head_beta "beta" --head_se "se" --head_A1 "allele1" --head_A2 "allele0" --Nind 500,500 \
   --ldsc_h2 0 --ldsc_h2_multi 0 --bolt_h2 1 --bolt_h2_multi 1 --gcta_h2 0 --gcta_h2_imp 0 --gcta_h2_multi 0 --gemma_h2 1 --gemma_h2_pval 1 -resume --output_dir heritability/ -profile singularity
 ```
-* output :
- * each log contains heritability as output order by folder
- * 1 file contains all heritability extracted and merge 
- * figure to compared each heritability
 
-##11 Multi-Trait Analysis of GWAS
+**Output**:
 
+* each log output by folder
+* file contains all information extracted and merge 
+* figure to compared each heritability
+
+
+# 11 Multi-Trait Analysis of GWAS
+
+Multi-trait analysis of GWAS (MTAG), a method for joint analysis of summary statistics from genome-wide association studies (GWAS) of different traits, possibly from overlapping samples. 
+
+
+
+
+
+**Input** : 
 * multi-trait analysis of GWAS (MTAG), a method for joint analysis of summary statistics from genome-wide association studies (GWAS) of different traits, possibly from overlapping samples. 
 * input : 
  * list of summary statistic `file_gwas` and header from gwas file: `-head_[name]`
  * also you can give nformation relative to : ` --input_dir data/imputed/ --input_pat imput_data --pheno pheno_qt1,pheno_qt2 --data data/pheno/pheno_test.all `, can add N value to each summary statistic
 
+**Output**:
+ * each log contains heritability as output order by folder
+ * 1 file contains all heritability extracted and merge 
+ * figure to compared each heritability
+
+
 ```
 nextflow run h3abionet/h3agwas/meta/mtag-assoc.nf --head_freq af --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --input_dir data/imputed/ --input_pat imput_data --file_gwas  data/summarystat/all_pheno.gemma,data/summarystat/all_phenoq2.gemma --pheno pheno_qt1,pheno_qt2 --data data/pheno/pheno_test.all -resume   -profile singularity
 ```
 
-##12 conversion of positions  between build
+# 12 Conversion of positions  between build
+
 
 ###12.1 GWAS catalog
 Objective is to used two way to convert positions build using rs value and crossmap using chromosome positions
 
-Example : download gwas catalog in hg38, and convert in 19 / 37 position 
+The objective is to convert build positions  using rs value and _crossmap_ using chromosome positions
 
+Example : download gwas catalog in hg38, and convert in 19 / 37 position 
 ```
 nextflow run h3abionet/h3agwas/formatdata/convert_posversiongenome.nf -profile singularity -resume
 ```
 
-###12.1 convert Summary statistics between hg19 and 38
+###12.2 convert Summary statistics between hg38 and 19
 
-Example : download gwas catalog in hg38, and convert in 19 / 37 position
+Example : we used output of `h3abionet/h3agwas/formatdata/format_gwasfile.nf` to convert hg19 in 38 
 
 ```
 nextflow run h3abionet/h3agwas/formatdata/convert_posversiongenome.nf -profile singularity -resume --file_toconvert  data/summarystat/assoc_testwithrs.sumstat  link_rs_info=ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606_b151_GRCh38p7/VCF/All_20180418.vcf.gz --link_data_crossmap=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToHg38.over.chain.gz --head_chr CHR --head_bp bp --head_rs SNP --sep SPACE
 ```
-
 
 
