@@ -545,6 +545,7 @@ nextflow run h3abionet/h3agwas/meta/mtag-assoc.nf --head_freq af --head_pval p_w
 
 ##12 conversion of positions  between build
 
+###12.1 GWAS catalog
 Objective is to used two way to convert positions build using rs value and crossmap using chromosome positions
 
 Example : download gwas catalog in hg38, and convert in 19 / 37 position 
@@ -552,3 +553,14 @@ Example : download gwas catalog in hg38, and convert in 19 / 37 position
 ```
 nextflow run h3abionet/h3agwas/formatdata/convert_posversiongenome.nf -profile singularity -resume
 ```
+
+###12.1 convert Summary statistics between hg19 and 38
+
+Example : download gwas catalog in hg38, and convert in 19 / 37 position
+
+```
+nextflow run h3abionet/h3agwas/formatdata/convert_posversiongenome.nf -profile singularity -resume --file_toconvert  data/summarystat/assoc_testwithrs.sumstat  link_rs_info=ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606_b151_GRCh38p7/VCF/All_20180418.vcf.gz --link_data_crossmap=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToHg38.over.chain.gz --head_chr CHR --head_bp bp --head_rs SNP --sep SPACE
+```
+
+
+
