@@ -413,7 +413,7 @@ nextflow run  h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald
  * `--score_imp` : score imputation, depend of your imputation software [default: INFO]
  * `--min_scoreinfo` : minimum score [default : 0.6]
  
-###9.2.1 Example from Sanger imputation panel
+### 9.2.1 Example from Sanger imputation panel
 ```
  ls data/imputed/vcf/*.vcf.gz  > utils/listvcf
  mkdir -p utils_data/
@@ -423,7 +423,7 @@ nextflow run  h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald
  nextflow run h3abionet/h3agwas/formatdata/vcf_in_plink.nf --file_listvcf utils/listvcf --output_pat  kgp_imputed --output_dir plink_imputed/   --reffasta utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz  -profile singularity
 ```
 
-###9.2.2 Example from Michigan Imputation with genetic map
+### 9.2.2 Example from Michigan Imputation with genetic map
 
 Input:
 * file are zipped with a password
@@ -441,7 +441,7 @@ Output :
 Look at this  [other example](README_buildataset.md) 
 
 
-##9.3 Format VCF file in bimbam format
+## 9.3 Format VCF file in bimbam format
 
 bimbam files contain dosage data used, for instance in gemma. Our pipeline does not use bimbam in this case, but some users may find this useful. The pipeline  uses _qctools (v2)_ and bcftools for format
 
@@ -503,35 +503,45 @@ nextflow h3abionet/h3agwas/formatdata/vcf_in_impute2.nf --file_listvcf listvcf -
 
 
 ## 10 Heritability and co-heritability estimation
-pipeline of heritability, can used summary statistics or genetics data to estimated heritability estimation and co-heritatbility :
-* with genetics data and phenotye :
-    *`--input_dir`, `--input_pat`, `--data`, `--pheno`  `covariates`
+
+The heritability pipeline can use summary statistics or genetics data for heritability  and co-heritatbility estimation: 
+
+* With genetics data and phenotye :
+    * `--input_dir`, `--input_pat`, `--data`, `--pheno`  `covariates`
 * summary statistics :  `--file_gwas` one or more separated by a comma, and `--head_[lhead]`
-* list of software :
- * summary statitics (ldsc or gemma):
+* software options (ldsc or gemma):
   * `--ldsc_h2 1` : performed ldsc 
-  * `--ldsc_h2_multi 1` : to do co heritability (must be have more than 1 file_gwas)
+  * `--ldsc_h2_multi 1` : to do co heritability (must be have more than one file_gwas)
   * `--gemma_h2_pval 1` : performed gemma using summary statistics
-  * `--Nind` : individu number (if not in summary statitics, if more than 1 studies, separated by a comma)
- * genetics and phenotype :
+  * `--Nind` : number of individuals (if not in summary statitics, if more than 1 studies, separated by a comma)
+* genetics and phenotype :
   * `--gemma_h2 1` : using gemma
   * `--gcta_h2 1` : using gcta
   * `--gcta_h2_multi` : gcta and computed co - heritability
   * `--bolt_h2` : _bolt-lmm_
   * `--bolt_h2_multi` : _bolt-lmm_ coheritability between phenotype
+
+
 ```
 nextflow run h3abionet/h3agwas/heritabilities/main.nf \
   --input_dir data/imputed/  --input_pat imput_data --data data/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
   --file_gwas data/summarystat/all_pheno.gemma,data/summarystat/all_phenoq2.gemma   --head_pval  "p_wald"  --head_freq  "af" --head_bp  "bp" --head_chr  "chr" --head_rs  "rs" --head_beta "beta" --head_se "se" --head_A1 "allele1" --head_A2 "allele0" --Nind 500,500 \
   --ldsc_h2 0 --ldsc_h2_multi 0 --bolt_h2 1 --bolt_h2_multi 1 --gcta_h2 0 --gcta_h2_imp 0 --gcta_h2_multi 0 --gemma_h2 1 --gemma_h2_pval 1 -resume --output_dir heritability/ -profile singularity
 ```
-* output :
- * each log output by folder
- * file contains all information extracted and merge 
- * figure to compared each heritability
+
+**Output**:
+
+* each log output by folder
+* file contains all information extracted and merge 
+* figure to compared each heritability
+
+
 ##11 Multi-Trait Analysis of GWAS
-* multi-trait analysis of GWAS (MTAG), a method for joint analysis of summary statistics from genome-wide association studies (GWAS) of different traits, possibly from overlapping samples. 
-* input : 
+
+Multi-trait analysis of GWAS (MTAG), a method for joint analysis of summary statistics from genome-wide association studies (GWAS) of different traits, possibly from overlapping samples. 
+
+
+**input** : 
  * list of summary statistic `file_gwas` and header from gwas file: `-head_[name]`
  * also you can give nformation relative to : ` --input_dir data/imputed/ --input_pat imput_data --pheno pheno_qt1,pheno_qt2 --data data/pheno/pheno_test.all `, can add N value to each summary statistic
 
