@@ -536,12 +536,12 @@ nextflow run h3abionet/h3agwas/heritabilities/main.nf \
 * figure to compared each heritability
 
 
-##11 Multi-Trait Analysis of GWAS
+# 11 Multi-Trait Analysis of GWAS
 
 Multi-trait analysis of GWAS (MTAG), a method for joint analysis of summary statistics from genome-wide association studies (GWAS) of different traits, possibly from overlapping samples. 
 
 
-**input** : 
+**Input** : 
  * list of summary statistic `file_gwas` and header from gwas file: `-head_[name]`
  * also you can give nformation relative to : ` --input_dir data/imputed/ --input_pat imput_data --pheno pheno_qt1,pheno_qt2 --data data/pheno/pheno_test.all `, can add N value to each summary statistic
 
@@ -549,10 +549,13 @@ Multi-trait analysis of GWAS (MTAG), a method for joint analysis of summary stat
 nextflow run h3abionet/h3agwas/meta/mtag-assoc.nf --head_freq af --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --input_dir data/imputed/ --input_pat imput_data --file_gwas  data/summarystat/all_pheno.gemma,data/summarystat/all_phenoq2.gemma --pheno pheno_qt1,pheno_qt2 --data data/pheno/pheno_test.all -resume   -profile singularity
 ```
 
-##12 conversion of positions  between build
-Objective is to used two way to convert positions build using rs value and crossmap using chromosome positions
+# 12 conversion of positions  between build
+
+
+The objective is to convert build positions  using rs value and _crossmap_ using chromosome positions
 
 Example : download gwas catalog in hg38, and convert in 19 / 37 position 
+
 ```
 nextflow run h3abionet/h3agwas/formatdata/convert_posversiongenome.nf -profile singularity -resume
 ```
