@@ -387,9 +387,12 @@ output :
 
 
 # 9. Format summary statistics, prepared data for imputation, or format data after imputation
+
 ## 9.1 format summary statistics
-Scrip formating summary statistic, replaced header and 
-input :
+
+The `format_gwasfile.nf' script formats summary statistics, replaces header information
+
+*Input* :
  *  new and old header, will be replaced
  * `input_dir` and `input_pat` : rename rsid in function of plink file
  * `--file_ref_gzip` : used to check ref alternatif or rsid
@@ -399,17 +402,18 @@ nextflow run  h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald
 ```
 
 
-## 9.1 Format vcf file after imputation in _plink_ file
+## 9.2 Format vcf file after imputation to  _plink_ format
+
 * format file vcf come from to imputaion and produce a report with distribution of score and frequency
-* option of interrest: 
- * `--file_listvcf` : file contains list of file vcf
+* options of interest: 
+ * `--file_listvcf` : file contains list of VCF files
  * `--output_pat` : output pattern of plink file 
  * `--output_dir` : output direction where you file 
  * `--reffasta` : reference in fasta format
  * `--score_imp` : score imputation, depend of your imputation software [default: INFO]
  * `--min_scoreinfo` : minimum score [default : 0.6]
  
-###9.1.1 example from sanger imputation panel
+###9.2.1 Example from Sanger imputation panel
 ```
  ls data/imputed/vcf/*.vcf.gz  > utils/listvcf
  mkdir -p utils_data/
@@ -419,23 +423,29 @@ nextflow run  h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald
  nextflow run h3abionet/h3agwas/formatdata/vcf_in_plink.nf --file_listvcf utils/listvcf --output_pat  kgp_imputed --output_dir plink_imputed/   --reffasta utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz  -profile singularity
 ```
 
-###9.1.2 example from michigan imputation with genetic map
-* file are zip with a password
+###9.2.2 Example from Michigan Imputation with genetic map
+
+Input:
+* file are zipped with a password
 * score imputation _R2_
 * if you want to add genetics map in plink option you can used `https://zenodo.org/record/6422542/files/genetic_map_hg19.txt?download=1` 
+
 ```
 nextflow run h3abionet/h3agwas/formatdata/vcf_in_plink.nf --file_listvcf $ListVCF --min_scoreinfo 0.4 -profile slurm --output_pat 1000G_imp_mich --output_dir 1000G_imp_mich --genetic_maps genetic_map_hg19.txt --plink_mem_req 10GB -resume --big_time 1000h  --score_imp R2 --other_mem_req 20GB --reffasta hs37d5.fa.gz --unzip_zip 1 --unzip_password "xxx" --statfreq_vcf "%AF"
 ```
 
-* output :
+Output :
   * plink file 
   * report contains distribution of frequency and score info [example of report](out_example/KGPH3abionet_imputed_report.pdf)
-* [other example](README_buildataset.md)
+
+Look at this  [other example](README_buildataset.md) 
 
 
-##9.2 format file vcf in bimbam
-bimbam are dosage used for instance in gemma (not implemented in pipeline), we used _qctools (v2)_ and bcftools to format
-* input option :
+##9.3 Format VCF file in bimbam format
+
+bimbam files contain dosage data used, for instance in gemma. Our pipeline does not use bimbam in this case, but some users may find this useful. The pipeline  uses _qctools (v2)_ and bcftools for format
+
+*Input option*:
   * `--file_listvcf` : file contains list of file vcf
   * `--output_pat` : output pattern of plink file
   * `--output_dir` : output direction where you file
@@ -449,9 +459,11 @@ bimbam are dosage used for instance in gemma (not implemented in pipeline), we u
 nextflow run h3abionet/h3agwas/formatdata/vcf_in_bimbam.nf --file_listvcf utils/listvcf  --output_pat  kgp_imputed --output_dir bimbam/   -profile singularity
 ```
 
-##9.3 format file vcf in bgen
-Format bgen is dosage format used by _fastgwa_, _bolt-lmm_ or _regenie_ 
-* input option :
+## 9.4 Format  VCF  file in  BGEN format
+
+The BGEN Format is a dosage format used by _fastgwa_, _bolt-lmm_ or _regenie_ 
+
+*Input option*:
   * `--file_listvcf` : file contains list of file vcf
   * `--output_pat` : output pattern of plink file
   * `--output_dir` : output direction where you file
@@ -459,34 +471,38 @@ Format bgen is dosage format used by _fastgwa_, _bolt-lmm_ or _regenie_
   * `--min_scoreinfo` : minimum score [default : 0.6]
 * bcftools are used to filter vcf and qctools (v2) for format in bgen
 
-###9.3.1 each vcf independant
-each vcf are filter independantly, merge and format in bgen
+### 9.4.1 Each vcf files independently
+
+Each VCF files is  filtered independently; they are then merged and formatted in BGEN formay
 ```
 nextflow run h3abionet/h3agwas/formatdata/vcf_in_bgen.nf --file_listvcf utils/listvcf --output_pat  exampledata2_imp --output_dir ./bgen -resume -profile singularity
 ```
 
-###9.3.2 merge vcf and format vcf merge in bgen
-each vcf are filter independantly, merge and final file is format in bgen
+### 9.4.2 Merge VCF files and reformat
+
+Each vcf is filtered independantly; they are merged and the  final file is refromatten
 ```
-~/nextflow run h3abionet/h3agwas/formatdata/vcf_in_bgen_merge.nf --output_dir bgen_v3 --output all  -profile singularity --file_listvcf listvcf -resume
+nextflow run h3abionet/h3agwas/formatdata/vcf_in_bgen_merge.nf --output_dir bgen_v3 --output all  -profile singularity --file_listvcf listvcf -resume
 ```
 
-###9.3.3 format each vcf in bgen and merge
-each vcf are filter and format in bgen and all bgen are merge, 
+### 9.4.3 Format first, and reformat
+
+Each vcf is filtered reformatted in BGEN; all bgen are then merged
 ```
-~/nextflow run h3abionet/h3agwas/formatdata/vcf_in_bgen_merge.nf --output_dir bgen_v3 --output all  -profile singularity --file_listvcf listvcf -resume
+nextflow run h3abionet/h3agwas/formatdata/vcf_in_bgen_merge.nf --output_dir bgen_v3 --output all  -profile singularity --file_listvcf listvcf -resume
 ```
 
 
-### 9.4 format vcf bgen and merge
-* used for bolt-lmm
+### 9.5 Format vcf in IMPUTE2 format
+
+Used for `bolt-lmm`
 
 ```
 nextflow h3abionet/h3agwas/formatdata/vcf_in_impute2.nf --file_listvcf listvcf --output_pat  utils/exampledata2_imp --output_dir ./impute2 -profile singularity -resume
 ```
 
 
-##10 Heritability and co-heritability estimation
+## 10 Heritability and co-heritability estimation
 pipeline of heritability, can used summary statistics or genetics data to estimated heritability estimation and co-heritatbility :
 * with genetics data and phenotye :
     *`--input_dir`, `--input_pat`, `--data`, `--pheno`  `covariates`
