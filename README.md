@@ -155,7 +155,7 @@ There are some pre-computed GEMMA output files we'll use in this example
 ls data/summarystat/*.gemma
 ```
 
-We create a file `input_meta.csv" with the file information
+We create a file `input_meta.csv` with the file information
 
 ```
 echo "rsID,Chro,Pos,A1,A2,Beta,Se,Pval,N,freqA1,direction,Imputed,Sep,File,Ncount" > utils/input_meta.csv
@@ -249,7 +249,6 @@ The `cojo-assoc.nf` pipeline performs conditional and joint analysis using summa
 * command line :
     * run cojo on each chromosome 
     * for each chromosome take best snp (`--cojo_top_snps_chro 1`)
-  
 
 The command to execute 
 
@@ -281,7 +280,7 @@ nextflow run  h3abionet/h3agwas/utils/annotation/main.nf --head_pval p_wald --he
 
 The algorithm will use  the GWAS Catalog (default) and lead position to define position to build phenotype and gcta. The input required is a list of position for the genotype positions.
 
-# 7.1 Basic operation
+## 7.1 Basic operation
 Key options
 * `--list_vcf`:  If you provie a value for the `--list_vcf` option, the genotype data will be extracted from the given VCF file. If this option is not provided, then the data will be generated from 1000 Genomes Data
 * `nb_snp` : snp number used to build phenotype
@@ -319,6 +318,7 @@ nextflow run h3abionet/h3agwas/utils/build_example_data/main.nf -profile singula
   * `$output.effect.rs.infors` : information relative of positions to build phenotype
 
 ## 7.2  other example 
+
 * see [page build example](README_buildataset.md)
 
 
@@ -519,7 +519,7 @@ nextflow h3abionet/h3agwas/formatdata/vcf_in_impute2.nf --file_listvcf listvcf -
 ```
 
 
-## 10 Heritability and co-heritability estimation
+# 10 Heritability and co-heritability estimation
 
 The heritability pipeline can use summary statistics or genetics data for heritability  and co-heritatbility estimation: 
 
@@ -538,6 +538,8 @@ The heritability pipeline can use summary statistics or genetics data for herita
   * `--bolt_h2` : _bolt-lmm_
   * `--bolt_h2_multi` : _bolt-lmm_ coheritability between phenotype
 
+## Example witthout ldsc
+
 ```
 nextflow run h3abionet/h3agwas/heritabilities/main.nf \
   --input_dir data/imputed/  --input_pat imput_data --data data/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
@@ -545,28 +547,27 @@ nextflow run h3abionet/h3agwas/heritabilities/main.nf \
   --ldsc_h2 0 --ldsc_h2_multi 0 --bolt_h2 1 --bolt_h2_multi 1 --gcta_h2 0 --gcta_h2_imp 0 --gcta_h2_multi 0 --gemma_h2 1 --gemma_h2_pval 1 -resume --output_dir heritability/ -profile singularity --grm_cutoff 0.5
 ```
 
-**Output**:
 
+## Example witthout ldsc
+
+```
+wget https://data.broadinstitute.org/alkesgroup/LDSCORE/eur_w_ld_chr.tar.bz2
+tar xvjf eur_w_ld_chr.tar.bz2
+~/nextflow $DirNex/h3agwas/heritabilities/main.nf \
+  --input_dir data/imputed/  --input_pat imput_data --data data/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
+  --file_gwas data/summarystat/all_pheno.gemma,data/summarystat/all_phenoq2.gemma   --head_pval  "p_wald"  --head_freq  "af" --head_bp  "ps" --head_chr  "chr" --head_rs  "rs" --head_beta "beta" --head_se "se" --head_A1 "allele1" --head_A2 "allele0" --Nind 500,500 \
+  --ldsc_h2 1 --ldsc_h2_multi 1 --bolt_h2 1 --bolt_h2_multi 1 --gcta_h2 1 --gcta_h2_imp 0 --gcta_h2_multi 0 --gemma_h2 1 --gemma_h2_pval 1 -resume --output_dir heritability/ $profile --grm_cutoff 0.5 --dir_ref_ld_chr eur_w_ld_chr -with-trace
+
+```
+
+###Output :
 * each log output by folder
 * file contains all information extracted and merge 
 * figure to compared each heritability
 
-
-```
-wget https://data.broadinstitute.org/alkesgroup/LDSCORE/eur_w_ld_chr.tar.bz2
-tar xvjf eur_w_ld_chr.tar.bz2 
-nextflow run h3abionet/h3agwas/heritabilities/main.nf \
-  --input_dir data/imputed/  --input_pat imput_data --data data/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
-  --file_gwas data/summarystat/all_pheno.gemma,data/summarystat/all_phenoq2.gemma   --head_pval  "p_wald"  --head_freq  "af" --head_bp  "bp" --head_chr  "chr" --head_rs  "rs" --head_beta "beta" --head_se "se" --head_A1 "allele1" --head_A2 "allele0" --Nind 500,500 \
-  --ldsc_h2 0 --ldsc_h2_multi 0 --bolt_h2 1 --bolt_h2_multi 1 --gcta_h2 0 --gcta_h2_imp 0 --gcta_h2_multi 0 --gemma_h2 1 --gemma_h2_pval 1 -resume --output_dir heritability/ -profile singularity --grm_cutoff 0.5
-```
-# 11 Multi-Trait Analysis of GWAS
+# 11. Multi-Trait Analysis of GWAS
 
 Multi-trait analysis of GWAS (MTAG), a method for joint analysis of summary statistics from genome-wide association studies (GWAS) of different traits, possibly from overlapping samples. 
-
-
-
-
 
 **Input** : 
 * multi-trait analysis of GWAS (MTAG), a method for joint analysis of summary statistics from genome-wide association studies (GWAS) of different traits, possibly from overlapping samples. 
@@ -587,7 +588,7 @@ nextflow run h3abionet/h3agwas/meta/mtag-assoc.nf --head_freq af --head_pval p_w
 # 12 Conversion of positions  between build
 
 
-###12.1 GWAS catalog
+## 12.1 GWAS catalog
 Objective is to used two way to convert positions build using rs value and crossmap using chromosome positions
 
 The objective is to convert build positions  using rs value and _crossmap_ using chromosome positions
@@ -597,7 +598,7 @@ Example : download gwas catalog in hg38, and convert in 19 / 37 position
 nextflow run h3abionet/h3agwas/formatdata/convert_posversiongenome.nf -profile singularity -resume
 ```
 
-###12.2 convert Summary statistics between hg38 and 19
+## 12.2 convert Summary statistics between hg38 and 19
 
 Example : we used output of `h3abionet/h3agwas/formatdata/format_gwasfile.nf` to convert hg19 in 38 
 
