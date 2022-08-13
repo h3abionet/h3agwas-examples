@@ -11,6 +11,8 @@ These examples show the basic working of some of the key sub-workflows only. We 
 
 A dataset has been build using 1000 Genomes Project data, selecting  50,000 SNPs found in the H3Africa Custom Chip Array and 500 individuals. Description and explanation can be found [here](README_buildataset.md) or bash script [here](builddata_set.bash)
 
+Information to run locally can be found [here](runlocal/ubuntu/README.md)
+
 ## 1.1  Data directory :
 * The data set can be found in [data folder](data), subfolder :
  * `data/array_plk/`: contains file for qc in plink format
@@ -605,5 +607,9 @@ Example : we used output of `h3abionet/h3agwas/formatdata/format_gwasfile.nf` to
 ```
 nextflow run h3abionet/h3agwas/formatdata/convert_posversiongenome.nf -profile singularity -resume --file_toconvert  data/summarystat/assoc_testwithrs.sumstat  link_rs_info=ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606_b151_GRCh38p7/VCF/All_20180418.vcf.gz --link_data_crossmap=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToHg38.over.chain.gz --head_chr CHR --head_bp bp --head_rs SNP --sep SPACE
 ```
+
+
+# 13 requirement 
+##QC
 
 

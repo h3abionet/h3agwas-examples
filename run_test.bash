@@ -10,7 +10,7 @@ chmod +x nextflow
 fi
 if [ $testdone == "qc" ]
 then
-$nextflowbin run $h3agwasdir//h3agwas/qc/main.nf --input_dir data/array_plk  --input_pat array --output_dir qc  --output kgpexample \
+$nextflowbin run $h3agwasdir/h3agwas/qc/main.nf --input_dir data/array_plk  --input_pat array --output_dir qc  --output kgpexample \
  --phenotype data/pheno/pheno_test.all --pheno_col phenoqc_ql \
  --case_control data/pheno/pheno_test.all --case_control_col Sex \
  --batch data/pheno/pheno_test.all --batch_col batch \
