@@ -9,8 +9,6 @@ RUN pip3 install  matplotlib==3.5.3
 RUN pip3 install  pandas==1.4.3
 RUN pip3 install  scipy==1.9.0
 
-RUN cd && git clone https://github.com/h3abionet/h3agwas-examples.git 
-RUN cd && mkdir testgit_qc && cd testgit_qc/ && ln -s ../h3agwas-examples/run_test.bash . && ln -s ../h3agwas-examples/data . && chmod +x ./run_test.bash
 RUN apt-get install curl -y 
 RUN wget https://download.oracle.com/java/18/latest/jdk-18_linux-x64_bin.deb && apt-get install ./jdk-18_linux-x64_bin.deb -y && rm -rf ./jdk-18_linux-x64_bin.deb
 RUN cat <<EOF | tee /etc/profile.d/jdk18.sh 
@@ -19,4 +17,6 @@ ENV PATH=$PATH:$JAVA_HOME/bin
 RUN wget -qO- https://get.nextflow.io | bash && cp ./nextflow ./bin/
 RUN nextflow pull h3abionet/h3agwas
 ## test final
-#RUN cd /root/testgit_qc && ./run_test.bash qc h3abionet standard nextflow
+RUN cd && git clone https://github.com/h3abionet/h3agwas-examples.git 
+RUN cd && mkdir testgit_qc && cd testgit_qc/ && ln -s ../h3agwas-examples/run_test.bash . && ln -s ../h3agwas-examples/data . && chmod +x ./run_test.bash
+RUN cd /root/testgit_qc && ./run_test.bash qc h3abionet standard nextflow

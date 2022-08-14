@@ -1,7 +1,10 @@
 # General instalation 
 
 
-Installation recommended has tested using docker image
+Installation recommended has been tested using docker image
+
+Binary used to test pipeline can be find :
+ * binary/
 
 ##latex :
 
@@ -60,6 +63,26 @@ git clone https://github.com/h3abionet/h3agwas-examples
 ##build a folder, link data
 mkdir testgit_qc && cd testgit_qc/ && ln -s ../h3agwas-examples/run_test.bash . && ln -s ../h3agwas-examples/data .
 ```
+
+## GWAS software
+
+### gemma 
+
+various version of GEMMA exist :
+ * github you can do a compulation
+ * conda
+ * compilation, pipeline has been tested with :
+   * [gemma : 98.4](https://github.com/genetics-statistics/GEMMA/releases/download/v0.98.4/gemma-0.98.4-linux-static-AMD64.gz) with some bug
+   * [gemma : 98.6, prerelease, fixed some error ](https://biogems.info/download/gemma-0.98.6-pre1.gz)
+
+'''
+wget https://biogems.info/download/gemma-0.98.6-pre1.gz
+gunzip gemma-0.98.6-pre1.gz
+'''
+### gcta
+
+[Pipeline has been tested with version 1.93.beta](https://raw.githubusercontent.com/h3abionet/h3agwas/master/utils/bin/gcta_1.93.2beta.zip)
+
 
 ##run a test
 
