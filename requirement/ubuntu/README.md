@@ -1,15 +1,24 @@
 # General instalation 
 
 
-Installation recommended has been tested using docker image
+Installation recommended has been tested using docker image 
 
 Binary used to test pipeline can be find :
  * binary/
 
-##latex :
+## latex 
 
 ```
 sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+```
+
+## plink
+
+plink version in pipeline tested was version of plink 1.9  (1.90~b6.16-200217-1) from repository ubuntu, plink1.9 binary must be renamed plink (cp or ln)
+
+```
+sudo apt-get update && sudo apt-get install plink1.9
+sudo cp /bin/plink1.9 /bin/plink && chmod +x /bin/plink
 ```
 
 ## python
@@ -64,7 +73,7 @@ git clone https://github.com/h3abionet/h3agwas-examples
 mkdir testgit_qc && cd testgit_qc/ && ln -s ../h3agwas-examples/run_test.bash . && ln -s ../h3agwas-examples/data .
 ```
 
-## GWAS software
+## softwares
 
 ### gemma 
 
@@ -75,10 +84,14 @@ various version of GEMMA exist :
    * [gemma : 98.4](https://github.com/genetics-statistics/GEMMA/releases/download/v0.98.4/gemma-0.98.4-linux-static-AMD64.gz) with some bug
    * [gemma : 98.6, prerelease, fixed some error ](https://biogems.info/download/gemma-0.98.6-pre1.gz)
 
-'''
+```
+wget https://github.com/genetics-statistics/GEMMA/releases/download/v0.98.4/gemma-0.98.4-linux-static-AMD64.gz
+gunzip gemma-0.98.4-linux-static-AMD64.gz
+
 wget https://biogems.info/download/gemma-0.98.6-pre1.gz
 gunzip gemma-0.98.6-pre1.gz
-'''
+```
+
 ### gcta
 
 [Pipeline has been tested with version 1.93.beta](https://raw.githubusercontent.com/h3abionet/h3agwas/master/utils/bin/gcta_1.93.2beta.zip)
@@ -97,7 +110,21 @@ script run test taking 4 arguments :
 ./run_test.bash qc h3abionet batch standard nextflow
 ```
 
-# Quality Control
+## Quality Control
+
+need :
+ * latex 
+ * python
+ * plink
+
+## GWAS 
+
+need :
+ * latex 
+ * python
+ * plink
+ * gemma
+
 
 Doesn't need other requierment that previous see [docker image](Docker/qc/)
 
