@@ -19,4 +19,4 @@ ENV PATH=$PATH:$JAVA_HOME/bin
 RUN wget -qO- https://get.nextflow.io | bash && cp ./nextflow ./bin/
 RUN nextflow pull h3abionet/h3agwas
 ## test final
-RUN cd /root/testgit_qc && ./run_test.bash qc h3abionet standard nextflow
+#RUN cd /root/testgit_qc && ./run_test.bash qc h3abionet standard nextflow
