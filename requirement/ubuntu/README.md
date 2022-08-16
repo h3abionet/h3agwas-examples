@@ -73,6 +73,36 @@ git clone https://github.com/h3abionet/h3agwas-examples
 mkdir testgit_qc && cd testgit_qc/ && ln -s ../h3agwas-examples/run_test.bash . && ln -s ../h3agwas-examples/data .
 ```
 
+## R 
+
+```
+```
+
+## SAIGE
+ * [installation here](https://saigegit.github.io/SAIGE-doc/)
+ * installation R ( default 4.1.2)
+ * gcc10 
+ * cmake
+ * cget using pip 3
+
+```
+apt-get install r-base cmake gcc-10 -y
+pip3 install cget==0.2.0
+```
+ 
+ * download : saige (release 1.0.0)
+ * untar
+ * install package need
+ * for library we need to install libssl-dev libcurl4-openssl-dev
+```
+apt-get install libssl-dev libcurl4-openssl-dev -y
+```
+
+```
+wget https://github.com/saigegit/SAIGE/releases/download/1.0.0/SAIGE_1.0.0.tar.gz && tar -xzf SAIGE_1.0.0.tar.gz &&  Rscript ./SAIGE/extdata/install_packages.R
+
+```
+
 ## softwares
 
 ### gemma 
@@ -87,15 +117,39 @@ various version of GEMMA exist :
 ```
 wget https://github.com/genetics-statistics/GEMMA/releases/download/v0.98.4/gemma-0.98.4-linux-static-AMD64.gz
 gunzip gemma-0.98.4-linux-static-AMD64.gz
+## move gemma and rename in binary
+mv gemma-0.98.4-linux-static-AMD64 /usr/local/bin/gemma 
+chmod +x /usr/local/bin/gemma
 
-wget https://biogems.info/download/gemma-0.98.6-pre1.gz
-gunzip gemma-0.98.6-pre1.gz
 ```
 
 ### gcta
 
 [Pipeline has been tested with version 1.93.beta](https://raw.githubusercontent.com/h3abionet/h3agwas/master/utils/bin/gcta_1.93.2beta.zip)
 
+```
+wget https://raw.githubusercontent.com/h3abionet/h3agwas/master/utils/bin/gcta_1.93.2beta.zip && unzip gcta_1.93.2beta.zip && cp gcta_1.93.2beta/gcta64 . && rm -rf gcta_1.93.2beta && rm -rf gcta_1.93.2beta.zip  && mv gcta64 /usr/local/bin/
+```
+
+### Bolt-LMM
+
+* version  2.4 of binary 
+```
+wget https://storage.googleapis.com/broad-alkesgroup-public/BOLT-LMM/downloads/BOLT-LMM_v2.4.tar.gz && tar -xzf  BOLT-LMM_v2.4.tar.gz && cp BOLT-LMM_v2.4/bolt bin/ && mv BOLT-LMM_v2.4.tar.gz src/ && rm -rf BOLT-LMM_v2.4/
+```
+
+
+```
+wget https://github.com/rgcgithub/regenie/releases/download/v3.1.3/regenie_v3.1.3.gz_x86_64_Linux.zip && unzip regenie_v3.1.3.gz_x86_64_Linux.zip && mv regenie_v3.1.3.gz_x86_64_Linux /usr/local/bin/regenie  && chmod +x /usr/local/bin/regenie
+```
+## software utils
+
+###bgenix
+
+* work on bgen
+```
+wget http://code.enkre.net/bgen/tarball/release/bgen.tgz && tar -xzf bgen.tgz && cd bgen.tgz/ && ./waf configure && ./waf && cp build/apps/bgenix /usr/bin/
+```
 
 ##run a test
 
@@ -109,6 +163,7 @@ script run test taking 4 arguments :
 ```
 ./run_test.bash qc h3abionet batch standard nextflow
 ```
+
 
 ## Quality Control
 
