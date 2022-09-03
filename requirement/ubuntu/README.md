@@ -62,44 +62,43 @@ wget -qO- https://get.nextflow.io | bash
 nextflow pull h3abionet/h3agwas
 ```
 
-## prepared data set test
 
-```
-### install git 
-sudo apt-get install git 
-## clone repository 
-git clone https://github.com/h3abionet/h3agwas-examples
-##build a folder, link data
-mkdir testgit_qc && cd testgit_qc/ && ln -s ../h3agwas-examples/run_test.bash . && ln -s ../h3agwas-examples/data .
-```
-
-## R 
-
-```
-```
 
 ## SAIGE
- * [installation here](https://saigegit.github.io/SAIGE-doc/)
- * installation R ( default 4.1.2)
- * gcc10 
- * cmake
- * cget using pip 3
+ * [installation](https://saigegit.github.io/SAIGE-doc/)
+ * Version doesn't work on ubuntu 22.04
+ * package : saige (release)
+  * installation R, and devtools 3.6.3
+  * cmake
+  * libopenblas-base
+  * python3
 
 ```
-apt-get install r-base cmake gcc-10 -y
-pip3 install cget==0.2.0
-```
- 
- * download : saige (release 1.0.0)
- * untar
- * install package need
- * for library we need to install libssl-dev libcurl4-openssl-dev
-```
-apt-get install libssl-dev libcurl4-openssl-dev -y
+sudo apt-get update && \
+    apt-get install -y \
+    r-base \
+    r-cran-devtools \
+    build-essential \
+    cmake \
+    libopenblas-base \
+    python3-pip \
+    r-cran-devtools \
+    git
+pip3 install cget
 ```
 
 ```
-wget https://github.com/saigegit/SAIGE/releases/download/1.0.0/SAIGE_1.0.0.tar.gz && tar -xzf SAIGE_1.0.0.tar.gz &&  Rscript ./SAIGE/extdata/install_packages.R
+git clone https://github.com/saigegit/SAIGE.git
+cd SAIGE
+Rscript extdata/install_packages.R
+R CMD INSTALL .
+
+mv step1_fitNULLGLMM.R step2_SPAtests.R step3_LDmat.R createSparseGRM.R /usr/local/bin/
+
+chmod a+x /usr/local/bin/step1_fitNULLGLMM.R
+chmod a+x /usr/local/bin/step2_SPAtests.R
+chmod a+x /usr/local/bin/step3_LDmat.R
+chmod a+x /usr/local/bin/createSparseGRM.R
 
 ```
 
@@ -132,33 +131,56 @@ wget https://raw.githubusercontent.com/h3abionet/h3agwas/master/utils/bin/gcta_1
 ```
 
 ### Bolt-LMM
-
-* version  2.4 of binary 
+* pipeline has been tested used using binary version 2.4
+ * on ubuntu bolt need libiomp5.so, install libomp-dev
 ```
+apt-get install -y libomp-dev
 wget https://storage.googleapis.com/broad-alkesgroup-public/BOLT-LMM/downloads/BOLT-LMM_v2.4.tar.gz && tar -xzf  BOLT-LMM_v2.4.tar.gz && cp BOLT-LMM_v2.4/bolt bin/ && mv BOLT-LMM_v2.4.tar.gz src/ && rm -rf BOLT-LMM_v2.4/
 ```
+
+### Regenie
+
+ * version tested 3.1.3
 
 
 ```
 wget https://github.com/rgcgithub/regenie/releases/download/v3.1.3/regenie_v3.1.3.gz_x86_64_Linux.zip && unzip regenie_v3.1.3.gz_x86_64_Linux.zip && mv regenie_v3.1.3.gz_x86_64_Linux /usr/local/bin/regenie  && chmod +x /usr/local/bin/regenie
 ```
 ## software utils
+### bgenix
 
-###bgenix
-
-* work on bgen
 ```
 wget http://code.enkre.net/bgen/tarball/release/bgen.tgz && tar -xzf bgen.tgz && cd bgen.tgz/ && ./waf configure && ./waf && cp build/apps/bgenix /usr/bin/
 ```
 
-##run a test
+### tabix 
 
-script run test taking 4 arguments :
- * testdone : script to test qc..
+```
+sudo apt-get install tabix -y
+```
+
+## run data-set 
+
+### download
+
+```
+### install git 
+sudo apt-get install git 
+## clone repository 
+git clone https://github.com/h3abionet/h3agwas-examples
+##build a folder, link data
+mkdir testgit_qc && cd testgit_qc/ && ln -s ../h3agwas-examples/run_test.bash . && ln -s ../h3agwas-examples/data .
+```
+
+### run a test
+
+a small test has been developped to run on test data set and differen part of pipeline. 
+Script taked 5 arguments :
+ * testdone : script to test qc, assoc
  * h3agwasdir : where find h3agwas repositotu 
  * profile slurm ? SIngularity?
  * nextflowbin : where find nextflow
- * otheroption 
+ * other option  (optional)
 
 ```
 ./run_test.bash qc h3abionet batch standard nextflow
@@ -167,6 +189,8 @@ script run test taking 4 arguments :
 
 ## Quality Control
 
+test on ubuntu 20.04
+
 need :
  * latex 
  * python
@@ -174,11 +198,23 @@ need :
 
 ## GWAS 
 
+test on ubuntu 20.04
+
 need :
  * latex 
- * python
- * plink
- * gemma
+ * python 
+ * plink 1.9
+optional :
+ * gemma 
+ * Regenie 
+ * saige :
+  * R
+ * gcta
+ * bolt-lmm
+ * saige :
+  * tabix for vcf input
+  * bgenix for vcf input
+
 
 
 Doesn't need other requierment that previous see [docker image](Docker/qc/)
