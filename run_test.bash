@@ -42,10 +42,11 @@ $nextflowbin run $h3agwasdir/h3agwas/assoc/main.nf --input_dir data/imputed/ --i
  --output_dir assoc_listbgen --output assoc \
  --boltlmm 1 --sample_snps_rel 1 --regenie 1 --fastgwa 1 --grm_nbpart 2 \
   -profile $profile \
+ --gemma_num_cores $maxcpu  --plink_num_cores $maxcpu  --other_num_cores $maxcpu --bolt_num_cores $maxcpu --saige_num_cores $maxcpu --regenie_num_cores $maxcpu --fastgwa_num_cores $maxcpu \
  --gemma_mem_req $maxmem  --plink_mem_req $maxmem  --other_mem_req $maxmem --bolt_mem_req $maxmem --saige_mem_req $maxmem --regenie_mem_req $maxmem --fastgwa_mem_req $maxmem \
-  --gemma_num_cores  2\
  --saige 1 -resume 
 fi
+
 if [ "$testdone" == "finemapping" ]
 then
 $nextflowbin run  $h3agwasdir/h3agwas/finemapping/main.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --list_phenogc "Type 2 diabetes" --input_dir  data/imputed/  --input_pat imput_data --file_gwas data/summarystat/all_pheno.gemma  --output_dir finemapping_pheno1 -resume  -profile $profile --size_wind_kb 500 --data  data/pheno/pheno_test.all --pheno pheno_qt1

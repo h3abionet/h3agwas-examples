@@ -60,9 +60,6 @@ WORKDIR /
 RUN rm -rf SAIGE
 
 #
-#
-##
-##
 
 RUN wget https://download.oracle.com/java/18/latest/jdk-18_linux-x64_bin.deb && apt-get install ./jdk-18_linux-x64_bin.deb -y && rm -rf ./jdk-18_linux-x64_bin.deb
 RUN cat <<EOF | tee /etc/profile.d/jdk18.sh 

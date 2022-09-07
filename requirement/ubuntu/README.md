@@ -1,46 +1,12 @@
-# General instalation 
-
+# General instalation using local machine
 
 Installation recommended has been tested using docker image 
 
-Binary used to test pipeline can be find :
- * binary/
-
-## latex 
-
-```
-sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
-```
-
-## plink
-
-plink version in pipeline tested was version of plink 1.9  (1.90~b6.16-200217-1) from repository ubuntu, plink1.9 binary must be renamed plink (cp or ln)
-
-```
-sudo apt-get update && sudo apt-get install plink1.9
-sudo cp /bin/plink1.9 /bin/plink && chmod +x /bin/plink
-```
-
-## python
-
-we tested with python 3.8 (should be work with python 3.6), it they is not in your repository
-
-```
-sudo apt-get install software-properties-common
-sudo add-apt-repository ppa:deadsnakes/ppa
-```
-
-```
-sudo apt-get install python3.8 python3-pip
-### upgrade pip
-pip3 install --upgrade pip
-```
-
 ## nextlow 
 
-### install java, nextflow required java 11 or 18
+### install dependencie of nextflow
 
-we used tutorial [her](https://computingforgeeks.com/install-oracle-java-18-on-ubuntu-debian/)
+[source](https://computingforgeeks.com/install-oracle-java-18-on-ubuntu-debian/)
 
 ```
 ## ensure that you havge get and curl
@@ -55,16 +21,61 @@ export JAVA_HOME=/usr/lib/jvm/jdk-18
 export PATH=\$PATH:\$JAVA_HOME/bin
 ```
 
-Install in your current directory and pull h3agwas/ha3bionet
+### install nextlow 
+
+Install nextlow in your current directory 
 
 ```
 wget -qO- https://get.nextflow.io | bash
+```
+
+### pull  h3agwas 
+
+```
 nextflow pull h3abionet/h3agwas
 ```
 
+## dependencie and softwares used by pipeline
 
+### latex 
 
-## SAIGE
+latex need to build report
+
+```
+sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+```
+
+### plink
+
+plink version in pipeline tested was version of plink 1.9  (1.90~b6.16-200217-1) from repository ubuntu, plink1.9 binary must be renamed plink (cp or ln)
+
+```
+sudo apt-get update && sudo apt-get install plink1.9
+sudo cp /bin/plink1.9 /bin/plink && chmod +x /bin/plink
+```
+
+### python
+
+we tested with python 3.8 and python 3.6, it they is not in your repository
+
+```
+sudo apt-get install software-properties-common
+sudo add-apt-repository ppa:deadsnakes/ppa
+```
+
+```
+sudo apt-get install python3 python3-pip
+### upgrade pip
+pip3 install --upgrade pip
+```
+
+### python library
+
+```
+
+```
+
+### SAIGE
  * [installation](https://saigegit.github.io/SAIGE-doc/)
  * Version doesn't work on ubuntu 22.04
  * package : saige (release)
@@ -84,6 +95,7 @@ sudo apt-get update && \
     python3-pip \
     r-cran-devtools \
     git
+pip3 install --upgrade pip
 pip3 install cget
 ```
 
@@ -102,8 +114,6 @@ chmod a+x /usr/local/bin/createSparseGRM.R
 
 ```
 
-## softwares
-
 ### gemma 
 
 various version of GEMMA exist :
@@ -119,10 +129,9 @@ gunzip gemma-0.98.4-linux-static-AMD64.gz
 ## move gemma and rename in binary
 mv gemma-0.98.4-linux-static-AMD64 /usr/local/bin/gemma 
 chmod +x /usr/local/bin/gemma
-
 ```
 
-### gcta
+### gcta / fastgwa
 
 [Pipeline has been tested with version 1.93.beta](https://raw.githubusercontent.com/h3abionet/h3agwas/master/utils/bin/gcta_1.93.2beta.zip)
 
@@ -132,21 +141,24 @@ wget https://raw.githubusercontent.com/h3abionet/h3agwas/master/utils/bin/gcta_1
 
 ### Bolt-LMM
 * pipeline has been tested used using binary version 2.4
- * on ubuntu bolt need libiomp5.so, install libomp-dev
+ * ubuntu 20.04, libiomp5.so, install libomp-dev
+
 ```
 apt-get install -y libomp-dev
-wget https://storage.googleapis.com/broad-alkesgroup-public/BOLT-LMM/downloads/BOLT-LMM_v2.4.tar.gz && tar -xzf  BOLT-LMM_v2.4.tar.gz && cp BOLT-LMM_v2.4/bolt bin/ && mv BOLT-LMM_v2.4.tar.gz src/ && rm -rf BOLT-LMM_v2.4/
+wget https://storage.googleapis.com/broad-alkesgroup-public/BOLT-LMM/downloads/BOLT-LMM_v2.4.tar.gz 
+tar -xzf  BOLT-LMM_v2.4.tar.gz 
+cp BOLT-LMM_v2.4/bolt /usr/local/bin 
+chmod +x /usr/local/bin/bolt
 ```
 
 ### Regenie
-
  * version tested 3.1.3
-
+ * regenie need bgenix when run using bgen
 
 ```
 wget https://github.com/rgcgithub/regenie/releases/download/v3.1.3/regenie_v3.1.3.gz_x86_64_Linux.zip && unzip regenie_v3.1.3.gz_x86_64_Linux.zip && mv regenie_v3.1.3.gz_x86_64_Linux /usr/local/bin/regenie  && chmod +x /usr/local/bin/regenie
 ```
-## software utils
+
 ### bgenix
 
 ```
@@ -159,9 +171,9 @@ wget http://code.enkre.net/bgen/tarball/release/bgen.tgz && tar -xzf bgen.tgz &&
 sudo apt-get install tabix -y
 ```
 
-## run data-set 
+## How to run test dataset
 
-### download
+### download and prepared folder
 
 ```
 ### install git 
@@ -174,11 +186,12 @@ mkdir testgit_qc && cd testgit_qc/ && ln -s ../h3agwas-examples/run_test.bash . 
 
 ### run a test
 
-a small test has been developped to run on test data set and differen part of pipeline. 
+you can used `run_test.bash`, script has parameter to run the test data set  
 Script taked 5 arguments :
- * testdone : script to test qc, assoc
- * h3agwasdir : where find h3agwas repositotu 
- * profile slurm ? SIngularity?
+ * testdone : script to test :
+   * qc : perform qc  
+ * h3agwasdir : where find h3agwas repositorie
+ * profile slurm ? SIngularity? standart
  * nextflowbin : where find nextflow
  * other option  (optional)
 
@@ -189,12 +202,14 @@ Script taked 5 arguments :
 
 ## Quality Control
 
-test on ubuntu 20.04
+test on ubuntu 22.04
 
 need :
  * latex 
  * python
  * plink
+
+* [docker image using for test](Docker/qc/)
 
 ## GWAS 
 
@@ -202,21 +217,22 @@ test on ubuntu 20.04
 
 need :
  * latex 
- * python 
+ * python 3.6 / 3.8
  * plink 1.9
+
 optional :
  * gemma 
  * Regenie 
  * saige :
+  * bgenix for bgen input
   * R
  * gcta
  * bolt-lmm
  * saige :
   * tabix for vcf input
-  * bgenix for vcf input
+  * bgenix for bgen input
 
 
 
-Doesn't need other requierment that previous see [docker image](Docker/qc/)
 
 
