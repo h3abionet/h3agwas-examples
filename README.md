@@ -15,7 +15,9 @@ Information to run locally can be found [here](runlocal/ubuntu/README.md)
 
 ## 1.1  Data directory :
 * The data set can be found in [data folder](data), subfolder :
- * `data/array_plk/`: contains file for qc in plink format
+ * `data/array_plk/`: contains file for qc and prepared for imputation in plink format
+   * data/array_plk/array.{.bed,bim,fam} : file to test qc
+   * data/array_plk/array_qc.{.bed,bim,fam} : file to test format plink in vcf to prepare imputation
  * `imputed` : contains file for gwas in plink format
  * `pheno/pheno_test.[pop]` : contains phenotype to perform gwas for each superpopulation of KGP :  AFR,AMR,EAS,EUR,SAS and all
    * FID : Family ID 
@@ -51,7 +53,7 @@ The first example takes raw PLINK data as input (that is data that comes after g
 In this example, we run QC on the raw data found in `data/array_plk/array`
 
 ```
-nextflow run h3abionet/h3agwas/qc/main.nf --input_dir data/array_plk  --input_pat array --output_dir qc  --output kgpexample \
+nextflow run h3abionet/h3agwas/qc/main.nf --input_dir data/array_plk  --input_pat array --output_dir qc  --output array_qc \
  --phenotype data/pheno/pheno_test.all --pheno_col phenoqc_ql \
  --case_control data/pheno/pheno_test.all --case_control_col Sex \
  --batch data/pheno/pheno_test.all --batch_col batch \
@@ -403,8 +405,26 @@ The `format_gwasfile.nf' script formats summary statistics, replaces header info
 nextflow run  h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --file_gwas data/summarystat/all_pheno.gemma  --output_dir format_assoc   -resume --headnew_pval p --headnew_bp bp --headnew_chr CHR --headnew_rs SNP --headnew_beta beta --headnew_se se --headnew_A1 allele1 --headnew_A2 allele0 --file_ref_gzip data/utils/all_rsinfo.init.gz --input_dir data/imputed/ --input_pat imput_data -profile singularity
 ```
 
+## 9.2 prepare data for imputation 
 
-## 9.2 Format vcf file after imputation to  _plink_ format
+`plk_in_vcf_imp.nf` script take in input a plink file and prepared data for imputation
+
+*Input* :
+ * `utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of [its file](ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/All_20180423.vcf.gz)
+
+
+```
+mkdir -p utils_data/
+cd utils_data/
+wget -c http://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz
+cd ../
+nextflow run h3abionet/h3agwas/formatdata/plk_in_vcf_imp.nf -profile slurm  --input_dir='../qc/output/' --input_pat='' --output_dir='vcf_output' --output='ukkbk_africa_qc1' --file_ref_gzip="utils/all_rsinfo.init.gz" --reffasta="utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz"
+
+
+```
+
+
+## 9.3 Format vcf file after imputation to  _plink_ format
 
 * format file vcf come from to imputaion and produce a report with distribution of score and frequency
 * options of interest: 
@@ -610,6 +630,5 @@ nextflow run h3abionet/h3agwas/formatdata/convert_posversiongenome.nf -profile s
 
 
 # 13 requirement 
-##QC
 
 

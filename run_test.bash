@@ -12,7 +12,7 @@ chmod +x nextflow
 fi
 if [ $testdone == "qc" ]
 then
-$nextflowbin run $h3agwasdir/h3agwas/qc/main.nf --input_dir data/array_plk  --input_pat array --output_dir qc  --output kgpexample \
+$nextflowbin run $h3agwasdir/h3agwas/qc/main.nf --input_dir data/array_plk  --input_pat array --output_dir qc  --output array_qc \
  --phenotype data/pheno/pheno_test.all --pheno_col phenoqc_ql \
  --case_control data/pheno/pheno_test.all --case_control_col Sex \
  --batch data/pheno/pheno_test.all --batch_col batch \
@@ -107,5 +107,31 @@ $nextflowbin $h3agwasdir/h3agwas/heritabilities/main.nf \
   --ldsc_h2 1 --ldsc_h2_multi 1 --bolt_h2 1 --bolt_h2_multi 1 --gcta_h2 1 --gcta_h2_imp 0 --gcta_h2_multi 0 --gemma_h2 1 --gemma_h2_pval 1 -resume --output_dir heritability/ -profile $profile --grm_cutoff 0.5 --dir_ref_ld_chr eur_w_ld_chr -with-trace
 fi
 
+
+
+
+if [ "$testdone" == "prepareforimp" ]
+then
+if [ ! -f utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz ]
+then
+mkdir -p utils_data/
+cd utils_data/
+wget -c http://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz
+cd ../
+fi
+$nextflowbin $h3agwasdir/h3agwas/formatdata/plk_in_vcf_imp.nf -profile $profile --input_dir='data/array_plk/' --input_pat='array_qc' --output_dir='vcf_forimp' --output='data_qc' --file_ref_gzip="data/utils/all_rsinfo.init.gz" --reffasta="utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz"
+fi
+
+if [ "$testdone" == "prepareforimp_michigan" ]
+then
+if [ ! -f utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz ]
+then
+mkdir -p utils_data/
+cd utils_data/
+wget -c http://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz
+cd ../
+fi
+$nextflowbin $h3agwasdir/h3agwas/formatdata/plk_in_vcf_imp.nf -profile $profile --input_dir='data/array_plk/' --input_pat='array_qc' --output_dir='vcf_forimp_michigan' --output='data_qc' --file_ref_gzip="data/utils/all_rsinfo.init.gz" --reffasta="utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz" --michigan_qc 1 -resume
+fi
 
 
