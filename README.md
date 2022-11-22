@@ -398,7 +398,7 @@ The `format_gwasfile.nf' script formats summary statistics, replaces header info
 
 *Input* :
  *  new and old header, will be replaced
- * `input_dir` and `input_pat` : rename rsid in function of plink file
+ * `input_dir` and `input_pat` : plink file contains used to rename rsid using informations
  * `--file_ref_gzip` : used to check ref alternatif or rsid
 
 ```
@@ -409,8 +409,12 @@ nextflow run  h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald
 
 `plk_in_vcf_imp.nf` script take in input a plink file and prepared data for imputation
 
-*Input* :
+*Input :
  * `utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of [its file](ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/All_20180423.vcf.gz)
+ * `input_dir` and `input_pat` plink file to convert in vcf 
+ * `output_dir` and `output` : output dir and output header for the vcf ifle  
+ * `file_ref_gzip` : contains information to check alternatif and reference
+ * reffasta : fasta file of species
 
 
 ```
@@ -418,9 +422,7 @@ mkdir -p utils_data/
 cd utils_data/
 wget -c http://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz
 cd ../
-nextflow run h3abionet/h3agwas/formatdata/plk_in_vcf_imp.nf -profile slurm  --input_dir='../qc/output/' --input_pat='' --output_dir='vcf_output' --output='ukkbk_africa_qc1' --file_ref_gzip="utils/all_rsinfo.init.gz" --reffasta="utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz"
-
-
+nextflow run h3abionet/h3agwas/formatdata/plk_in_vcf_imp.nf -profile slurm  --input_dir='data/array_plk/' --input_pat='array_qc' --output_dir='vcf_output' --output='data_qc' --file_ref_gzip="data/utils/all_rsinfo.init.gz" --reffasta="utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz"
 ```
 
 
@@ -436,6 +438,7 @@ nextflow run h3abionet/h3agwas/formatdata/plk_in_vcf_imp.nf -profile slurm  --in
  * `--min_scoreinfo` : minimum score [default : 0.6]
  
 ### 9.2.1 Example from Sanger imputation panel
+
 ```
  ls data/imputed/vcf/*.vcf.gz  > utils/listvcf
  mkdir -p utils_data/
@@ -451,7 +454,7 @@ nextflow run h3abionet/h3agwas/formatdata/plk_in_vcf_imp.nf -profile slurm  --in
 
 * file are zip with a password
 * score imputation _R2_
-* if you want to add genetics map in plink option you can used `https://zenodo.org/record/6422542/files/genetic_map_hg19.txt?download=1` 
+* if you want to add genetics map in plink option you can download matp [here](https://zenodo.org/record/6422542/files/genetic_map_hg19.txt?download=1)
 
 ```
 nextflow run h3abionet/h3agwas/formatdata/vcf_in_plink.nf --file_listvcf $ListVCF --min_scoreinfo 0.4 -profile slurm --output_pat 1000G_imp_mich --output_dir 1000G_imp_mich --genetic_maps genetic_map_hg19.txt --plink_mem_req 10GB -resume --big_time 1000h  --score_imp R2 --other_mem_req 20GB --reffasta hs37d5.fa.gz --unzip_zip 1 --unzip_password "xxx" --statfreq_vcf "%AF"
