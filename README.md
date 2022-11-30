@@ -402,19 +402,22 @@ The `format_gwasfile.nf' script formats summary statistics, replaces header info
  * `--file_ref_gzip` : used to check ref alternatif or rsid
    * we used`utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of [its file](ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/All_20180423.vcf.gz)
 
+** change header in file **
 
 ```
 nextflow run  h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --file_gwas data/summarystat/all_pheno.gemma  --output_dir format_assoc   -resume --headnew_pval p --headnew_bp bp --headnew_chr CHR --headnew_rs SNP --headnew_beta beta --headnew_se se --headnew_A1 allele1 --headnew_A2 allele0 --file_ref_gzip data/utils/all_rsinfo.init.gz --input_dir data/imputed/ --input_pat imput_data -profile singularity
 ```
 
 
-*Add rsid to summary statistics*
+**Add rsid to summary statistics**
+ * if there is not rsid header in input, `format_gwasfile.nf` will add rsid extracted from file `--file_ref_gzip` based on chromosome, positions and alt/ref
 
 ```
 nextflow run  h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald  --head_chr chr --head_bp ps --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --file_gwas data/summarystat/all_pheno.gemma  --output_dir  ./ -resume  --file_ref_gzip data/utils/all_rsinfo.init.gz -profile singularity --output all_pheno.gemma.addrs -r dev
 ```
 
-*Add chromosome and position in function of rsid*
+**Add chromosome and position in function of rsid**
+ * if there is not chromosome / bp header in input, `format_gwasfile.nf` will add chromosome/positions extracted from file `--file_ref_gzip` based on rsid
 
 ```
 nextflow run  h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald   --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --file_gwas data/summarystat/all_pheno.gemma.addrs --output_dir  ./ -resume  --file_ref_gzip data/utils/all_rsinfo.init.gz --input_dir data/imputed/ --input_pat imput_data -profile slurmSingularity --head_out out_chrbp.gemma --head_rs rs --output all_pheno.gemma.addchrps -r dev
@@ -588,7 +591,7 @@ nextflow run h3abionet/h3agwas/heritabilities/main.nf \
 ```
 
 
-## Example witthout ldsc
+## Example wit ldsch
 
 ```
 wget https://data.broadinstitute.org/alkesgroup/LDSCORE/eur_w_ld_chr.tar.bz2
@@ -596,7 +599,7 @@ tar xvjf eur_w_ld_chr.tar.bz2
 ~/nextflow $DirNex/h3agwas/heritabilities/main.nf \
   --input_dir data/imputed/  --input_pat imput_data --data data/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
   --file_gwas data/summarystat/all_pheno.gemma,data/summarystat/all_phenoq2.gemma   --head_pval  "p_wald"  --head_freq  "af" --head_bp  "ps" --head_chr  "chr" --head_rs  "rs" --head_beta "beta" --head_se "se" --head_A1 "allele1" --head_A2 "allele0" --Nind 500,500 \
-  --ldsc_h2 1 --ldsc_h2_multi 1 --bolt_h2 1 --bolt_h2_multi 1 --gcta_h2 1 --gcta_h2_imp 0 --gcta_h2_multi 0 --gemma_h2 1 --gemma_h2_pval 1 -resume --output_dir heritability/ $profile --grm_cutoff 0.5 --dir_ref_ld_chr eur_w_ld_chr -with-trace
+  --ldsc_h2 1 --ldsc_h2_multi 1 --bolt_h2 1 --bolt_h2_multi 1 --gcta_h2 1 --gcta_h2_imp 0 --gcta_h2_multi 0 --gemma_h2 1 --gemma_h2_pval 1 -resume --output_dir heritability/ $profile --grm_cutoff 0.5 --dir_ref_ld_chr eur_w_ld_chr 
 
 ```
 
