@@ -30,7 +30,7 @@ Information to run locally can be found [here](runlocal/ubuntu/README.md)
    * pheno\_qt[12] : quantitative phenotype used for GWAS
  * `summarystat/[pop]_pheno.gemma` : result of GWAS using GEMMA for phenotype 1
  * `summarystat/all_phenoq2.gemma` : result of GWAS using gwas for phenotype 2 and all
- * `utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of [its file](ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/All_20180423.vcf.gz)
+ * `utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/All_20180423.vcf.gz
 
 
 ## 1.2  To run these examples
@@ -400,9 +400,9 @@ The `format_gwasfile.nf' script formats summary statistics, replaces header info
  *  new and old header, will be replaced
  * `input_dir` and `input_pat` : plink file contains used to rename rsid using informations
  * `--file_ref_gzip` : used to check ref alternatif or rsid
-   * we used`utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of [its file](ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/All_20180423.vcf.gz)
+   * we used`utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/All_20180423.vcf.gz
 
-** change header in file **
+**change header in file**
 
 ```
 nextflow run  h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --file_gwas data/summarystat/all_pheno.gemma  --output_dir format_assoc   -resume --headnew_pval p --headnew_bp bp --headnew_chr CHR --headnew_rs SNP --headnew_beta beta --headnew_se se --headnew_A1 allele1 --headnew_A2 allele0 --file_ref_gzip data/utils/all_rsinfo.init.gz --input_dir data/imputed/ --input_pat imput_data -profile singularity
