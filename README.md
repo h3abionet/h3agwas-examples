@@ -30,7 +30,7 @@ Information to run locally can be found [here](runlocal/ubuntu/README.md)
    * pheno\_qt[12] : quantitative phenotype used for GWAS
  * `summarystat/[pop]_pheno.gemma` : result of GWAS using GEMMA for phenotype 1
  * `summarystat/all_phenoq2.gemma` : result of GWAS using gwas for phenotype 2 and all
- * `utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/All_20180423.vcf.gz
+ * `utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of [files here](shorturl.at/HJLN0)
 
 
 ## 1.2  To run these examples
@@ -400,7 +400,8 @@ The `format_gwasfile.nf' script formats summary statistics, replaces header info
  *  new and old header, will be replaced
  * `input_dir` and `input_pat` : plink file contains used to rename rsid using informations
  * `--file_ref_gzip` : used to check ref alternatif or rsid
-   * we used`utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/All_20180423.vcf.gz
+   * we used`utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of files [here](shorturl.at/HJLN0)
+ 
 
 **change header in file**
 
@@ -428,7 +429,8 @@ nextflow run  h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald
 `plk_in_vcf_imp.nf` script take in input a plink file and prepared data for imputation
 
 *Input :
- * `utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of [its file](ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/All_20180423.vcf.gz)
+ * `utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of files [here](shorturl.at/HJLN0)
+
  * `input_dir` and `input_pat` plink file to convert in vcf 
  * `output_dir` and `output` : output dir and output header for the vcf ifle  
  * `file_ref_gzip` : contains information to check alternatif and reference
