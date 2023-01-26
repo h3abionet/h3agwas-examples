@@ -23,14 +23,15 @@ if [ "$testdone" == "assoc" ]
 then
 awk '{print $1"\t"$4"\t"$4"\t"$2}'  data/array_plk/array.bim > list_pos
 ls data/imputed/bgen_chro/*.bgen > listbgen
-$nextflowbin run $h3agwasdir/h3agwas/assoc/main.nf --input_dir data/imputed/ --input_pat imput_data \
+echo "$nextflowbin run $h3agwasdir/h3agwas/assoc/main.nf --input_dir data/imputed/ --input_pat imput_data \
  --data data/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
  --output_dir assoc_bgen --output assoc \
  --boltlmm 1 --sample_snps_rel 1 --regenie 1 --fastgwa 1 --grm_nbpart 2\
   -profile $profile \
  --gemma_num_cores $maxcpu  --plink_num_cores $maxcpu  --other_num_cores $maxcpu --bolt_num_cores $maxcpu --saige_num_cores $maxcpu --regenie_num_cores $maxcpu --fastgwa_num_cores $maxcpu \
  --gemma_mem_req $maxmem  --plink_mem_req $maxmem  --other_mem_req $maxmem --bolt_mem_req $maxmem --saige_mem_req $maxmem --regenie_mem_req $maxmem --fastgwa_mem_req $maxmem \
- --bgen data/imputed/bgen/out.bgen --bgen_sample data/imputed/bgen/out.sample --saige 1 -resume
+ --bgen data/imputed/bgen/out.bgen --bgen_sample data/imputed/bgen/out.sample --saige 1 -resume --assoc 1" > run_"$testdone".bash
+bash run_"$testdone".bash
 
 fi
 

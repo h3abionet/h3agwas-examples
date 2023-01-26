@@ -1,6 +1,6 @@
 rsID,Chro,Pos,A1,A2,Beta,Se,Pval,N,freqA1,direction,Imputed,Sep,File,Ncount
 rs,chr,ps,allele0,allele1,beta,se,p_wald,NA,af,NA,NA,TAB,data/summarystat/AFR_pheno.gemma,2500
-rs,chr,ps,allele0,allele1,beta,se,p_wald,NA,af,NA,NA,TAB,data/summarystat/AMR_pheno.gemma,2500
+rs,NA,NA,allele0,allele1,beta,se,p_wald,NA,NA,NA,NA,TAB,data/summarystat/AMR_pheno.gemma,2500
 rs,chr,ps,allele0,allele1,beta,se,p_wald,NA,af,NA,NA,TAB,data/summarystat/EAS_pheno.gemma,2500
 rs,chr,ps,allele0,allele1,beta,se,p_wald,NA,af,NA,NA,TAB,data/summarystat/EUR_pheno.gemma,2500
 rs,chr,ps,allele0,allele1,beta,se,p_wald,NA,af,NA,NA,TAB,data/summarystat/SAS_pheno.gemma,2500
