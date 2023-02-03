@@ -102,8 +102,7 @@ nextflow run h3abionet/h3agwas/assoc/main.nf \
  --data data/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
  --output_dir assoc --output assoc \
  --gemma 1 --sample_snps_rel 1 --linear 1 \ 
-  -profile singularity \
- --bgen data/imputed/bgen/out.bgen --bgen_sample data/imputed/bgen/out.sample
+  -profile singularity 
 ```
 
 Output :
