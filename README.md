@@ -651,6 +651,25 @@ nextflow run h3abionet/h3agwas/formatdata/convert_posversiongenome.nf -profile s
 ```
 
 
-# 13 requirement 
+# 13 replication using gwas catalog
+Replication using gwas catalog :
+* if no file gave, download gwas catalog
+* extract positions corresponding at one phenotype
+* used two other algorithm to research replication :
+  * exact replication : compared position from your gwas file and gwas catalog computed FDR and Bonferroni correction 
+  * `clump replication` to defined what positions are associated with lead positions and if positions is in gwas catalog
+  * `LD replicaiton` : to defined LD between SNPs from summary statistics and gwas catalog and extract best p-valye
+
+Extract gwas catalog by default in pipeline
+```
+nextflow h3abionet/h3agwas/replication/gwascat/main.nf --justpheno_gc 1
+```
+
+Do a replication
+```
+$nextflowbin h3abionet/h3agwas/replication/gwascat/main.nf  --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0  --file_gwas data/summarystat/all_pheno.gemma  --output_dir replication_gc -profile singularity -resume  --input_dir data/imputed/ --input_pat imput_data --head_af af --pheno_gc "Type 2 diabetes"
+
+```
+
 
 

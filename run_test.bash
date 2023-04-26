@@ -136,3 +136,26 @@ $nextflowbin $h3agwasdir/h3agwas/formatdata/plk_in_vcf_imp.nf -profile $profile 
 fi
 
 
+if [ "$testdone" == "vcfinplink" ]
+then
+if [ -f utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa_clean.fa.gz ]
+then
+ fasta=utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa_clean.fa.gz
+else
+ if [ ! -f utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz ]
+ then
+ mkdir -p utils_data/
+ cd utils_data/
+ wget -c http://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz
+ cd ../
+ fasta=utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz
+ fi
+fi
+nextflow run $h3agwasdir/h3agwas/formatdata/vcf_in_plink.nf --file_listvcf utils/listvcf --output_pat  kgp_imputed --output_dir plink_imputed/   --reffasta $fasta  -profile singularity -resume -dump-hashes
+fi
+
+if [ "$testdone" == "replication_gc" ]
+then
+$nextflowbin $h3agwasdir/h3agwas/replication/gwascat/main.nf  --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0  --file_gwas data/summarystat/all_pheno.gemma  --output_dir replication_gc -profile $profile -resume  --input_dir data/imputed/ --input_pat imput_data --head_af af --pheno_gc "Type 2 diabetes"
+fi
+
