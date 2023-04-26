@@ -667,7 +667,7 @@ nextflow h3abionet/h3agwas/replication/gwascat/main.nf --justpheno_gc 1
 
 Do a replication
 ```
-$nextflowbin h3abionet/h3agwas/replication/gwascat/main.nf  --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0  --file_gwas data/summarystat/all_pheno.gemma  --output_dir replication_gc -profile singularity -resume  --input_dir data/imputed/ --input_pat imput_data --head_af af --pheno_gc "Type 2 diabetes"
+nextflow h3abionet/h3agwas/replication/gwascat/main.nf  --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0  --file_gwas data/summarystat/all_pheno.gemma  --output_dir replication_gc -profile singularity -resume  --input_dir data/imputed/ --input_pat imput_data --head_af af --pheno_gc "Type 2 diabetes"
 
 ```
 
