@@ -159,3 +159,14 @@ then
 $nextflowbin $h3agwasdir/h3agwas/replication/gwascat/main.nf  --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0  --file_gwas data/summarystat/all_pheno.gemma  --output_dir replication_gc -profile $profile -resume  --input_dir data/imputed/ --input_pat imput_data --head_af af --pheno_gc "Type 2 diabetes"
 fi
 
+if [ "$testdone" == "replication_ss" ]
+then
+#allowed_params_head_sumstat1 = ["file_gwas_sumstat1","head_pval_sumstat1", "head_freq_sumstat1", "head_bp_sumstat1", "head_chr_sumstat1", "head_rs_sumstat1", "head_beta_sumstat1", "head_se_sumstat1", "head_A1_sumstat1", "head_A2_sumstat1", "head_n_sumstat1", "n_count1",'head_z_sumstat1']
+#allowed_params_head_sumstat2 = ["file_gwas_sumstat2","head_pval_sumstat2", "head_freq_sumstat2", "head_bp_sumstat2", "head_chr_sumstat2", "head_rs_sumstat2", "head_beta_sumstat2", "head_se_sumstat2", "head_A1_sumstat2", "head_A2_sumstat2", "head_n_sumstat2", 'n_count2','head_z_sumstat2']
+
+$nextflowbin $h3agwasdir/h3agwas/replication/fullsumstat/main.nf  \
+ --head_pval_sumstat1 p_wald --head_bp_sumstat1 ps --head_chr_sumstat1 chr --head_rs_sumstat1 rs --head_beta_sumstat1 beta --head_se_sumstat1 se --head_A1_sumstat1 allele1 --head_A2_sumstat1 allele0 --file_gwas_sumstat1 data/summarystat/all_pheno.gemma --head_frq_sumstat1 af --n_count1 500 \
+ --head_pval_sumstat2 p_wald --head_bp_sumstat2 ps --head_chr_sumstat2 chr --head_rs_sumstat2 rs --head_beta_sumstat2 beta --head_se_sumstat2 se --head_A1_sumstat2 allele1 --head_A2_sumstat2 allele0 --file_gwas_sumstat2 data/summarystat/all_phenoq2.gemma --head_frq_sumstat1 af --n_count2 500\
+  --output_dir replication_ss -profile $profile -resume  --input_dir data/imputed/ --input_pat imput_data 
+fi
+

@@ -673,3 +673,29 @@ nextflow h3abionet/h3agwas/replication/gwascat/main.nf  --head_pval p_wald --hea
 
 
 
+# 13 replication using summary statistics of other studies
+Replication using other studies:
+* input : 
+ * 2 summary statistics :
+  * `--file_gwas_sumstat1` : 
+    * descriptif of each summary statistics of header using `--head_[]_sumstat1` with [] is pval, bp, chr, rs, beta, se, A1, A2 and/or N
+    * if no column N, you can add N with `n_count1`
+  * `--file_gwas_sumstat2` : 
+    * descriptif of each summary statistics of header using `--head_[]_sumstat2` with [] is pval, bp, chr, rs, beta, se, A1, A2 and/or N
+    * if no column N, you can add N with `n_count1`
+  * genotype for clump and LD between two files
+
+Extract gwas catalog by default in pipeline
+```
+nextflow h3abionet/h3agwas/replication/gwascat/main.nf --justpheno_gc 1
+```
+
+Do a replication
+```
+nextflow h3agwas/replication/fullsumstat/main.nf  \
+ --head_pval_sumstat1 p_wald --head_bp_sumstat1 ps --head_chr_sumstat1 chr --head_rs_sumstat1 rs --head_beta_sumstat1 beta --head_se_sumstat1 se --head_A1_sumstat1 allele1 --head_A2_sumstat1 allele0 --file_gwas_sumstat1 data/summarystat/all_pheno.gemma --head_frq_sumstat1 af --n_count1 500 \
+ --head_pval_sumstat2 p_wald --head_bp_sumstat2 ps --head_chr_sumstat2 chr --head_rs_sumstat2 rs --head_beta_sumstat2 beta --head_se_sumstat2 se --head_A1_sumstat2 allele1 --head_A2_sumstat2 allele0 --file_gwas_sumstat2 data/summarystat/all_phenoq2.gemma --head_frq_sumstat1 af --n_count2 500\
+  --output_dir replication_ss -profile $profile -resume  --input_dir data/imputed/ --input_pat imput_data
+
+```
+
