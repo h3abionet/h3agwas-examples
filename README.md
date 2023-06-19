@@ -427,12 +427,12 @@ nextflow run  h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald
 
 `plk_in_vcf_imp.nf` script take in input a plink file and prepared data for imputation
 
-*Input :
- * `utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of files [here](shorturl.at/HJLN0)
-
+* Input :
  * `input_dir` and `input_pat` plink file to convert in vcf 
  * `output_dir` and `output` : output dir and output header for the vcf ifle  
- * `file_ref_gzip` : contains information to check alternatif and reference
+ * `file_ref_gzip` : 
+  * contains information to check alternatif and reference, rename rs
+  * `utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of files [here](shorturl.at/HJLN0)
  * reffasta : fasta file of species
 
 
@@ -455,6 +455,11 @@ nextflow run h3abionet/h3agwas/formatdata/plk_in_vcf_imp.nf -profile slurm  --in
  * `--reffasta` : reference in fasta format
  * `--score_imp` : score imputation, depend of your imputation software [default: INFO]
  * `--min_scoreinfo` : minimum score [default : 0.6]
+ * `--file_ref_gzip` : 
+  * contains information to check alternatif and reference, rename rs
+  * `utils/all_rsinfo.init.gz` : contains information relative to rsid / positions, subsample of files [here](shorturl.at/HJLN0)
+
+
  
 ### 9.2.1 Example from Sanger imputation panel
 
@@ -464,7 +469,8 @@ nextflow run h3abionet/h3agwas/formatdata/plk_in_vcf_imp.nf -profile slurm  --in
  cd utils_data/
  wget -c http://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz
  cd ../
- nextflow run h3abionet/h3agwas/formatdata/vcf_in_plink.nf --file_listvcf utils/listvcf --output_pat  kgp_imputed --output_dir plink_imputed/   --reffasta utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz  -profile singularity
+ nextflow run h3abionet/h3agwas/formatdata/vcf_in_plink.nf --file_listvcf utils/listvcf --output_pat  kgp_imputed --output_dir plink_imputed/   --reffasta utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz  -profile singularity  --file_ref_gzip data/utils/all_rsinfo.init.gz
+
 ```
 
 

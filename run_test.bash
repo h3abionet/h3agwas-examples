@@ -151,7 +151,7 @@ else
  fasta=utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz
  fi
 fi
-nextflow run $h3agwasdir/h3agwas/formatdata/vcf_in_plink.nf --file_listvcf utils/listvcf --output_pat  kgp_imputed --output_dir plink_imputed/   --reffasta $fasta  -profile singularity -resume -dump-hashes
+nextflow run $h3agwasdir/h3agwas/formatdata/vcf_in_plink.nf --file_listvcf utils/listvcf --output_pat  kgp_imputed --output_dir plink_imputed/   --reffasta $fasta  -profile $profile -resume  --file_ref_gzip="data/utils/all_rsinfo.init.gz"
 fi
 
 if [ "$testdone" == "replication_gc" ]
