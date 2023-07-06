@@ -74,6 +74,12 @@ if [ "$testdone" == "meta" ]
 then
 $nextflowbin run $h3agwasdir/h3agwas/meta/meta-assoc.nf   --metal 1 --gwama 1 --metasoft 1 --mrmega 1 --plink  1  --file_config utils/input_meta.csv -resume -profile singularity --output_dir meta
 fi
+
+if [ "$testdone" == "metapval" ]
+then
+$nextflowbin run $h3agwasdir/h3agwas/meta/meta-assoc.nf   --metal 1 --gwama 1 --metasoft 1 --mrmega 1 --plink  1  --file_config utils/input_meta.csv -resume -profile singularity --output_dir metapval --used_pval_z 1
+fi
+
 if [ "$testdone" == "formatgwasfile" ]
 then
 $nextflowbin run  $h3agwasdir/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --file_gwas data/summarystat/all_pheno.gemma  --output_dir format_assoc   -resume --headnew_pval p --headnew_bp bp --headnew_chr CHR --headnew_rs SNP --headnew_beta beta --headnew_se se --headnew_A1 allele1 --headnew_A2 allele0 --file_ref_gzip data/utils/all_rsinfo.init.gz --input_dir data/imputed/ --input_pat imput_data -profile $profile
@@ -151,8 +157,68 @@ else
  fasta=utils_data/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz
  fi
 fi
-nextflow run $h3agwasdir/h3agwas/formatdata/vcf_in_plink.nf --file_listvcf utils/listvcf --output_pat  kgp_imputed --output_dir plink_imputed/   --reffasta $fasta  -profile $profile -resume  --file_ref_gzip="data/utils/all_rsinfo.init.gz"
+nextflow run $h3agwasdir/h3agwas/formatdata/vcf_in_plink.nf --file_listvcf utils/listvcf --output_pat  kgp_imputed --output_dir plink_imputed/   --reffasta $fasta  -profile $profile -resume  --file_ref_gzip="data/utils/all_rsinfo.init.gz" --data data/pheno/pheno_test.all 
 fi
+
+if [ "$testdone" == "vcfinbimbam" ]
+then
+nextflow run $h3agwasdir/h3agwas/formatdata/vcf_in_bimbam.nf --file_listvcf utils/listvcf --output_pat kgp_imputed --output_dir bimbam_imputed/     -profile $profile -resume  --cut_hwe 0.0001
+fi
+
+
+if [ "$testdone" == "vcfinbimbamnohwe" ]
+then
+nextflow run $h3agwasdir/h3agwas/formatdata/vcf_in_bimbam.nf --file_listvcf utils/listvcf --output_pat kgp_imputed --output_dir bimbam_imputed_nohwe/     -profile $profile -resume
+fi
+
+
+
+if [ "$testdone" == "vcfinbgen" ]
+then
+nextflow run $h3agwasdir/h3agwas/formatdata/vcf_in_bgen.nf --file_listvcf utils/listvcf --output_pat kgp_imputed --output_dir bgen_imputed/     -profile $profile -resume  --cut_hwe 0.0001
+fi
+
+
+if [ "$testdone" == "vcfinbgennohwe" ]
+then
+nextflow run $h3agwasdir/h3agwas/formatdata/vcf_in_bgen.nf --file_listvcf utils/listvcf --output_pat kgp_imputed --output_dir bgen_imputed_nohwe/     -profile $profile -resume
+fi
+
+
+if [ "$testdone" == "vcfinbgenmerge" ]
+then
+nextflow run $h3agwasdir/h3agwas/formatdata/vcf_in_bgen_merge.nf --file_listvcf utils/listvcf --output_pat kgp_imputed --output_dir bgenmerge_imputed/     -profile $profile -resume  --cut_hwe 0.0001
+fi
+
+if [ "$testdone" == "vcfinbgenmergenohwe" ]
+then
+nextflow run $h3agwasdir/h3agwas/formatdata/vcf_in_bgen_merge.nf --file_listvcf utils/listvcf --output_pat kgp_imputed --output_dir bgenmerge_imputed_nohwe/     -profile $profile -resume  
+fi
+
+
+if [ "$testdone" == "vcfinbgenchromerge" ]
+then
+nextflow run $h3agwasdir/h3agwas/formatdata/vcf_in_bgen_merge_chro.nf --file_listvcf utils/listvcf --output_pat kgp_imputed --output_dir bgenmergechro_imputed/     -profile $profile -resume  --cut_hwe 0.0001
+fi
+
+if [ "$testdone" == "vcfinbgenmergechronohwe" ]
+then
+nextflow run $h3agwasdir/h3agwas/formatdata/vcf_in_bgen_merge_chro.nf --file_listvcf utils/listvcf --output_pat kgp_imputed --output_dir bgenmergechro_imputed_nohwe/     -profile $profile -resume  
+fi
+
+
+if [ "$testdone" == "vcfinimpute2chromerge" ]
+then
+nextflow run $h3agwasdir/h3agwas/formatdata/vcf_in_impute2.nf --file_listvcf utils/listvcf --output_pat kgp_imputed --output_dir impute2mergechro_imputed/     -profile $profile -resume  --cut_hwe 0.0001
+fi
+
+if [ "$testdone" == "vcfinimpute2mergechronohwe" ]
+then
+nextflow run $h3agwasdir/h3agwas/formatdata/vcf_in_impute2.nf --file_listvcf utils/listvcf --output_pat kgp_imputed --output_dir impute2mergechro_imputed_nohwe/     -profile $profile -resume
+fi
+
+
+
 
 if [ "$testdone" == "replication_gc" ]
 then
@@ -163,7 +229,6 @@ if [ "$testdone" == "replication_ss" ]
 then
 #allowed_params_head_sumstat1 = ["file_gwas_sumstat1","head_pval_sumstat1", "head_freq_sumstat1", "head_bp_sumstat1", "head_chr_sumstat1", "head_rs_sumstat1", "head_beta_sumstat1", "head_se_sumstat1", "head_A1_sumstat1", "head_A2_sumstat1", "head_n_sumstat1", "n_count1",'head_z_sumstat1']
 #allowed_params_head_sumstat2 = ["file_gwas_sumstat2","head_pval_sumstat2", "head_freq_sumstat2", "head_bp_sumstat2", "head_chr_sumstat2", "head_rs_sumstat2", "head_beta_sumstat2", "head_se_sumstat2", "head_A1_sumstat2", "head_A2_sumstat2", "head_n_sumstat2", 'n_count2','head_z_sumstat2']
-
 $nextflowbin $h3agwasdir/h3agwas/replication/fullsumstat/main.nf  \
  --head_pval_sumstat1 p_wald --head_bp_sumstat1 ps --head_chr_sumstat1 chr --head_rs_sumstat1 rs --head_beta_sumstat1 beta --head_se_sumstat1 se --head_A1_sumstat1 allele1 --head_A2_sumstat1 allele0 --file_gwas_sumstat1 data/summarystat/all_pheno.gemma --head_frq_sumstat1 af --n_count1 500 \
  --head_pval_sumstat2 p_wald --head_bp_sumstat2 ps --head_chr_sumstat2 chr --head_rs_sumstat2 rs --head_beta_sumstat2 beta --head_se_sumstat2 se --head_A1_sumstat2 allele1 --head_A2_sumstat2 allele0 --file_gwas_sumstat2 data/summarystat/all_phenoq2.gemma --head_frq_sumstat1 af --n_count2 500\
