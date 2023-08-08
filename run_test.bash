@@ -85,6 +85,20 @@ then
 $nextflowbin run  $h3agwasdir/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --file_gwas data/summarystat/all_pheno.gemma  --output_dir format_assoc   -resume --headnew_pval p --headnew_bp bp --headnew_chr CHR --headnew_rs SNP --headnew_beta beta --headnew_se se --headnew_A1 allele1 --headnew_A2 allele0 --file_ref_gzip data/utils/all_rsinfo.init.gz --input_dir data/imputed/ --input_pat imput_data -profile $profile
 fi
 
+if [ "$testdone" == "formatgwasfilegc" ]
+then
+$nextflowbin run  $h3agwasdir/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald --head_bp ps --head_chr chr --head_rs rs --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --file_gwas data/summarystat/all_pheno.gemma   -resume --file_ref_gzip data/utils/all_rsinfo.init.gz --input_dir data/imputed/ --input_pat imput_data -profile $profile  --out_gc 1 --output_dir formatgwasgc --output gc_format
+fi
+
+if [ "$testdone" == "formatgwasfilegcupdaters" ]
+then
+$nextflowbin run  $h3agwasdir/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald --head_bp ps --head_chr chr --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --file_gwas data/summarystat/all_pheno.gemma     -resume --file_ref_gzip data/utils/all_rsinfo.init.gz --input_dir data/imputed/ --input_pat imput_data -profile $profile  --out_gc 1 --output_dir formatgwasgc_nors --output gc_format
+fi
+
+if [ "$testdone" == "formatgwasfilegcupdatersnval" ]
+then
+$nextflowbin run  $h3agwasdir/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald --head_bp ps --head_chr chr --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --file_gwas data/summarystat/all_pheno.gemma    -resume --file_ref_gzip data/utils/all_rsinfo.init.gz  -profile $profile  --out_gc 1 --output_dir formatgwasgc_nors_nval --output gc_format --N_value 500 --head_freq af
+fi
 #ls data/imputed/vcf/*.gz > listvcf
 #$nextflowbin run /home/jeantristan/Travail/git/h3agwas/formatdata/vcf_in_bgen_merge_chro.nf --output_dir bgen_v3 --output all  -profile $profile --file_listvcf listvcf -resume
 
