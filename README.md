@@ -423,6 +423,14 @@ nextflow run  h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald
 nextflow run  h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald   --head_beta beta --head_se se --head_A1 allele1 --head_A2 allele0 --file_gwas data/summarystat/all_pheno.gemma.addrs --output_dir  ./ -resume  --file_ref_gzip data/utils/all_rsinfo.init.gz --input_dir data/imputed/ --input_pat imput_data -profile slurmSingularity --head_out out_chrbp.gemma --head_rs rs --output all_pheno.gemma.addchrps -r dev
 ```
 
+**format in gwas catalogs ouptut**
+
+
+```
+N=500
+nextflow run  $h3abionet/h3agwas/formatdata/format_gwasfile.nf --head_pval p_wald --head_bp ps --head_chr chr  --head_A1 allele1 --head_A2 allele0 --file_gwas  /summarystat/all_pheno.gemma.addrs  -resume --file_ref_gzip data/utils/all_rsinfo.init.gz  -profile singularity  --out_gc 1 --output_dir format_gc --output format_gc --N_value $N --sep TAB --head_beta beta --head_se se --head_freq af
+```
+
 ## 9.2 prepare data for imputation 
 
 `plk_in_vcf_imp.nf` script take in input a plink file and prepared data for imputation
