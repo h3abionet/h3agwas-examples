@@ -505,7 +505,6 @@ bimbam files contain dosage data used, for instance in gemma. Our pipeline does 
 
 
 
-
 ```
 nextflow run h3abionet/h3agwas/formatdata/vcf_in_bimbam.nf --file_listvcf utils/listvcf  --output_pat  kgp_imputed --output_dir bimbam/   -profile singularity
 ```
