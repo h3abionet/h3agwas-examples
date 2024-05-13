@@ -30,7 +30,7 @@ echo "$nextflowbin run $h3agwasdir/h3agwas/assoc/main.nf --input_dir data/impute
   -profile $profile \
  --gemma_num_cores $maxcpu  --plink_num_cores $maxcpu  --other_num_cores $maxcpu --bolt_num_cores $maxcpu --saige_num_cores $maxcpu --regenie_num_cores $maxcpu --fastgwa_num_cores $maxcpu \
  --gemma_mem_req $maxmem  --plink_mem_req $maxmem  --other_mem_req $maxmem --bolt_mem_req $maxmem --saige_mem_req $maxmem --regenie_mem_req $maxmem --fastgwa_mem_req $maxmem \
- --bgen data/imputed/bgen/out.bgen --bgen_sample data/imputed/bgen/out.sample --saige 1 -resume --assoc 1" > run_"$testdone".bash
+ --bgen data/imputed/bgen/out.bgen --bgen_sample data/imputed/bgen/out.sample --saige 1 -resume --assoc 1 --covariates batch,Sex --covariates_type 0,1 " > run_"$testdone".bash
 bash run_"$testdone".bash
 
 fi
