@@ -5,35 +5,145 @@ nextflowbin=$4
 otheroption=$5
 maxmem=10GB
 maxcpu=4
+
+echo "command line $1 $2 $3 $4 $5"
+if [ -z "$1" ]
+then
+  echo "args for script $1 not found " 
+	exit 1
+fi
+
+
+
+dirI=$PWD
+nextflowbin=`realpath $nextflowbin`
+h3agwasdir=`realpath $h3agwasdir`
+dirdata=$PWD/data
+
 if [ $testdone == "installnf" ]
-then 
+then
 wget -qO- https://get.nextflow.io | bash
 chmod +x nextflow
 fi
+
+mkdir -p $testdone
 if [ $testdone == "qc" ]
 then
-$nextflowbin run $h3agwasdir/h3agwas/qc/main.nf --input_dir data/array_plk  --input_pat array --output_dir qc  --output array_qc \
- --phenotype data/pheno/pheno_test.all --pheno_col phenoqc_ql \
- --case_control data/pheno/pheno_test.all --case_control_col Sex \
- --batch data/pheno/pheno_test.all --batch_col batch \
- -profile $profile -resume $otheroption
+cd $testdone
+echo "$nextflowbin run $h3agwasdir/h3agwas/main.nf --bfile $dirdata/array_plk/array --output_dir qc  --output array_qc --qc 1 \
+ --data $dirdata/pheno/pheno_test.all --pheno_col phenoqc_ql \
+ --case_control $dirdata/pheno/pheno_test.all --case_control_col Sex \
+ --batch $dirdata/pheno/pheno_test.all --batch_col batch \
+ -profile $profile -resume $otheroption " > $testdone".bash"
+cd $dirI
 fi
 
 if [ "$testdone" == "assoc" ]
 then
-awk '{print $1"\t"$4"\t"$4"\t"$2}'  data/array_plk/array.bim > list_pos
-ls data/imputed/bgen_chro/*.bgen > listbgen
-echo "$nextflowbin run $h3agwasdir/h3agwas/assoc/main.nf --input_dir data/imputed/ --input_pat imput_data \
- --data data/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
- --output_dir assoc_bgen --output assoc \
- --boltlmm 1 --sample_snps_rel 1 --regenie 1 --fastgwa 1 --grm_nbpart 2\
-  -profile $profile \
- --gemma_num_cores $maxcpu  --plink_num_cores $maxcpu  --other_num_cores $maxcpu --bolt_num_cores $maxcpu --saige_num_cores $maxcpu --regenie_num_cores $maxcpu --fastgwa_num_cores $maxcpu \
- --gemma_mem_req $maxmem  --plink_mem_req $maxmem  --other_mem_req $maxmem --bolt_mem_req $maxmem --saige_mem_req $maxmem --regenie_mem_req $maxmem --fastgwa_mem_req $maxmem \
- --bgen data/imputed/bgen/out.bgen --bgen_sample data/imputed/bgen/out.sample --saige 1 -resume --assoc 1 --covariates batch,Sex --covariates_type 0,1 " > run_"$testdone".bash
-bash run_"$testdone".bash
-
+	mkdir -p $testdone
+	cd $testdone
+	awk '{print $1"\t"$4"\t"$4"\t"$2}'  $dirdata/array_plk/array.bim > list_pos
+	echo "$nextflowbin run $h3agwasdir/h3agwas/main.nf --bfile $dirdata/imputed/imput_data --association 1 \
+		--data $dirdata/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2,phenoqc_ql \
+		--output_dir $testdone \
+		 --boltlmm 1 --sample_snps_rel 1 --regenie 1 --fastgwa 1 --assoc 1 --fisher 1 --logistic 1  --linear 1 --grm_nbpart 2 \
+		-profile $profile \
+		--high_memory $maxmem \
+		--saige 1 -resume --association 1 --covariates batch,Sex --covariates_type 1,1  --pheno_type 0,0,1 " > "$testdone".bash
+		#bash "$testdone".bash
+		cd $dirI
 fi
+
+if [ "$testdone" == "assoc_bgen" ]
+then
+        mkdir -p $testdone
+        cd $testdone
+        awk '{print $1"\t"$4"\t"$4"\t"$2}'  $dirdata/array_plk/array.bim > list_pos
+        echo "$nextflowbin run $h3agwasdir/h3agwas/main.nf --bfile $dirdata/imputed/imput_data --association 1 \
+                --data $dirdata/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2,phenoqc_ql \
+                --output_dir $testdone \
+		 --boltlmm 1 --sample_snps_rel 1 --regenie 1 --fastgwa 1 --assoc 1 --fisher 1 --logistic 1  --linear 1 --grm_nbpart 2 \
+                --pheno_type 0,0,1 \
+                -profile $profile --max_cpus 10 \
+                --bgen $dirdata/imputed/bgen/out.bgen --bgen_sample $dirdata/imputed/bgen/out.sample --saige 1 -resume --association 1 --covariates batch,Sex --covariates_type 1,1  " > "$testdone".bash
+                #bash "$testdone".bash
+                cd $dirI
+fi
+
+
+if [ "$testdone" == "assoc_listbgen" ]
+then
+mkdir -p $testdone
+cd $testdone
+ls $dirdata/imputed/bgen_chro/*.bgen > listbgen
+awk '{print $1"\t"$4"\t"$4"\t"$2}'  $dirdata/array_plk/array.bim > list_pos
+echo "$nextflowbin run $h3agwasdir/h3agwas/main.nf --bfile $dirdata/imputed/imput_data --association 1 \
+--data $dirdata/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
+--output_dir $testdone \
+ --boltlmm 1 --sample_snps_rel 1 --regenie 1 --fastgwa 1 --assoc 1 --fisher 1 --logistic 1  --linear 1 --grm_nbpart 2 \
+-profile $profile --max_cpus 10 \
+--bgen_list listbgen --bgen_sample $dirdata/imputed/bgen_chro/all_17.sample --saige 1 -resume --association 1 --covariates batch,Sex --covariates_type 1,1  --pheno_type 0,0,1  " > "$testdone".bash
+					                #bash "$testdone".bash
+cd $dirI
+fi
+
+
+
+
+if [ "$testdone" == "impute" ]
+then
+mkdir -p $testdone
+cd $testdone
+echo "$nextflowbin run $h3agwasdir/h3agwas/main.nf --vcf $dirdata/data/imputed/all.vcf.gz --impute 1 " > "$testdone".bash
+cd $dirI
+fi
+
+
+
+
+if [ "$testdone" == "assoc_vcf" ]
+then
+
+        cd $testdone
+        ls $dirdata/imputed/vcf/*.gz > listvcf
+        awk '{print $1"\t"$4"\t"$4"\t"$2}'  $dirdata/array_plk/array.bim > list_pos
+        echo "$nextflowbin run $h3agwasdir/h3agwas/main.nf --bfile $dirdata/imputed/imput_data --association 1 \
+                --data $dirdata/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
+                --output_dir $testdone \
+		 --boltlmm 1 --sample_snps_rel 1 --regenie 1 --fastgwa 1 --assoc 1 --fisher 1 --logistic 1  --linear 1 --grm_nbpart 2 \
+                -profile $profile --gemma_num_cores $maxcpu  --plink_num_cores $maxcpu  --other_num_cores $maxcpu --bolt_num_cores $maxcpu --saige_num_cores $maxcpu --regenie_num_cores $maxcpu --fastgwa_num_cores $maxcpu \
+                 --saige 1 -resume --association 1 --covariates batch,Sex --covariates_type 0,1 --vcf_list listvcf --pheno_type 0,0,1" > "$testdone".bash
+                #bash "$testdone".bash
+                cd $dirI
+fi
+
+
+exit
+
+
+
+if [ "$testdone" == "assoc_phenotr" ]
+then
+#	   phenores_tr_fct  = ""
+#	      pheno_tr_fct = ""
+#	         pheno_residuals = 0
+#		    add_pcs = 0
+
+mkdir -p $testdone
+cd $testdone
+awk '{print $1"\t"$4"\t"$4"\t"$2}'  $dirdata/array_plk/array.bim > list_pos
+echo "$nextflowbin run $h3agwasdir/h3agwas/main.nf --bfile $dirdata/imputed/imput_data --association 1 \
+--data $dirdata/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
+--output_dir $testdone \
+--boltlmm 1 --sample_snps_rel 1 --regenie 1  --grm_nbpart 2 \
+-profile $profile --gemma_num_cores $maxcpu  --plink_num_cores $maxcpu  --other_num_cores $maxcpu --bolt_num_cores $maxcpu --saige_num_cores $maxcpu --regenie_num_cores $maxcpu --fastgwa_num_cores $maxcpu \
+--gemma_mem_req $maxmem  --plink_mem_req $maxmem  --other_mem_req $maxmem --bolt_mem_req $maxmem --saige_mem_req $maxmem --regenie_mem_req $maxmem --fastgwa_mem_req $maxmem \
+--bgen $dirdata/imputed/bgen/out.bgen --bgen_sample $dirdata/imputed/bgen/out.sample --saige 1 -resume --association 1 --covariates batch,Sex --covariates_type 0,1 --add_pcs 5 --pheno_tr_fct log log --pheno_residuals 1 --phenores_tr_fct invnorm " > "$testdone".bash
+#bash "$testdone".bash
+cd $dirI
+fi
+
+exit
 
 if [ "$testdone" == "assocnobgen" ]
 then
@@ -41,9 +151,9 @@ awk '{print $1"\t"$4"\t"$4"\t"$2}'  data/array_plk/array.bim > list_pos
 $nextflowbin run $h3agwasdir/h3agwas/assoc/main.nf --input_dir data/imputed/ --input_pat imput_data \
  --data data/pheno/pheno_test.all --pheno pheno_qt1,pheno_qt2 \
  --output_dir assoc_nobgen --output assoc_nobgen \
- --boltlmm 1 --sample_snps_rel 1 --regenie 1 --fastgwa 1 --grm_nbpart 2 \
+ --boltlmm 1 --sample_snps_rel 1 --regenie 1 --fastgwa 1 --assoc 1 --fisher 1 --logistic 1  --linear 1 --grm_nbpart 2 \
   -profile $profile \
- --gemma_num_cores $maxcpu  --plink_num_cores $maxcpu  --other_num_cores $maxcpu --bolt_num_cores $maxcpu --saige_num_cores $maxcpu --regenie_num_cores $maxcpu --fastgwa_num_cores $maxcpu \
+ --max_cpus 10 \
  --gemma_mem_req $maxmem  --plink_mem_req $maxmem  --other_mem_req $maxmem --bolt_mem_req $maxmem --saige_mem_req $maxmem --regenie_mem_req $maxmem --fastgwa_mem_req $maxmem \
  --saige 1 -resume 
 fi
